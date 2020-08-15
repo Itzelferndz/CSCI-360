@@ -1,0 +1,384 @@
+1                   J E S 2  J O B  L O G  --  S Y S T E M  2 9 6 4  --  N O D E  S V S C J E S 2        
+0 
+ 15.11.37 JOB04260 ---- TUESDAY,   24 MAR 2020 ----
+ 15.11.37 JOB04260  IRR010I  USERID KC03C9D  IS ASSIGNED TO THIS JOB.
+ 15.11.37 JOB04260  ICH70001I KC03C9D  LAST ACCESS AT 14:58:55 ON TUESDAY, MARCH 24, 2020
+ 15.11.37 JOB04260  $HASP373 KC03C9DS STARTED - INIT 2    - CLASS A        - SYS 2964
+ 15.11.37 JOB04260  $HASP395 KC03C9DS ENDED - RC=0000
+0------ JES2 JOB STATISTICS ------
+-  24 MAR 2020 JOB EXECUTION DATE
+-          240 CARDS READ
+-          388 SYSOUT PRINT RECORDS
+-            0 SYSOUT PUNCH RECORDS
+-           33 SYSOUT SPOOL KBYTES
+-         0.00 MINUTES EXECUTION TIME
+         1 //KC03C9DS JOB ,'ITZEL FERNANDEZ',MSGCLASS=H                            JOB04260
+         2 //STEP1    EXEC  PGM=ASSIST                                                     
+         3 //STEPLIB    DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                            
+         4 //SYSPRINT   DD  SYSOUT=*                                                       
+         5 //SYSIN      DD  *                                                              
+         6 //FT05F001  DD  DSN=KC02314.SPRING20.CSCI360.HW5DATA,DISP=SHR                   
+ ICH70001I KC03C9D  LAST ACCESS AT 14:58:55 ON TUESDAY, MARCH 24, 2020
+ IEFA111I KC03C9DS IS USING THE FOLLOWING JOB RELATED SETTINGS:
+          SWA=ABOVE,TIOT SIZE=32K,DSENQSHR=DISALLOW,GDGBIAS=JOB
+ IEF236I ALLOC. FOR KC03C9DS STEP1
+ IGD103I SMS ALLOCATED TO DDNAME STEPLIB
+ IEF237I JES2 ALLOCATED TO SYSPRINT
+ IEF237I JES2 ALLOCATED TO SYSIN
+ IGD103I SMS ALLOCATED TO DDNAME FT05F001
+ IEF142I KC03C9DS STEP1 - STEP WAS EXECUTED - COND CODE 0000
+ IGD104I KC02293.ASSIST.LOADLIB                       RETAINED,  DDNAME=STEPLIB 
+ IEF285I   KC03C9D.KC03C9DS.JOB04260.D0000102.?         SYSOUT        
+ IEF285I   KC03C9D.KC03C9DS.JOB04260.D0000101.?         SYSIN         
+ IGD104I KC02314.SPRING20.CSCI360.HW5DATA             RETAINED,  DDNAME=FT05F001
+ IEF373I STEP/STEP1   /START 2020084.1511
+ IEF032I STEP/STEP1   /STOP  2020084.1511 
+         CPU:     0 HR  00 MIN  00.00 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+         VIRT:   584K  SYS:   248K  EXT:        0K  SYS:    13552K
+         ATB- REAL:                  4116K  SLOTS:                     0K
+              VIRT- ALLOC:      11M SHRD:       0M
+ IEF375I  JOB/KC03C9DS/START 2020084.1511
+ IEF033I  JOB/KC03C9DS/STOP  2020084.1511 
+         CPU:     0 HR  00 MIN  00.00 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+1*** ASSIST 4.0/A2-05/15/82  470/V7A/0:OS/VS2  INS=SDFP7/X=BGHO, CHECK/TRC/=1180, OPTS=CDKMPR FROM PENN ST*NIU COMPSCI*LT         
+0                                                                                                                                 
+0                                                                                                               PAGE    1         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                       1 ************************************************************                             
+                                       2 *                                                                                        
+                                       3 *           Assignment 5                                                                 
+                                       4 *                                                                                        
+                                       5 *                                                                                        
+                                       6 *  Register usage:                                                                       
+                                       7 *    1        Param list/XDECO                                                           
+                                       8 *    2        Buffer                                                                     
+                                       9 *   10        location in program when branched                                          
+                                      10 *   13        main save                                                                  
+                                      11 *   14        DONT USE                                                                   
+                                      12 *   15        Base register                                                              
+                                      13 ************************************************************                             
+ 000000                               14 MAIN     CSECT                                                                           
+                                      15 ***ENTRY LINKAGE******************                                                       
+ 000000 90EC D00C            0000C    16          STM   14,12,12(13)                                                              
+ 000004 18CF                          17          LR    12,15                                                                     
+ 000000                               18          USING MAIN,12                                                                   
+ 000006 41E0 C1B4            001B4    19          LA    14,SAVEM                                                                  
+ 00000A 50D0 E004            00004    20          ST    13,4(,14)                                                                 
+ 00000E 50E0 D008            00008    21          ST    14,8(,13)                                                                 
+ 000012 18DE                          22          LR    13,14                                                                     
+                                      23 ***MAIN BODY**********************                                                       
+ 000014 4110 C06C            0006C    24          LA    1,TABLE      Load the address of Table                                    
+ 000018 5010 C19C            0019C    25          ST    1,PARMS      Store Table address in params                                
+ 00001C 4110 C198            00198    26          LA    1,EOT        Load address of end of table                                 
+ 000020 5010 C1A0            001A0    27          ST    1,PARMS+4    Store end of table in params                                 
+ 000024 4110 C198            00198    28          LA    1,TABLELEN   Load the address of table lenght                             
+ 000028 5010 C1A4            001A4    29          ST    1,PARMS+8    Store the table lenght in params                             
+ 00002C 4110 C1B0            001B0    30          LA    1,RESULT     Load address of results                                      
+ 000030 5010 C1AC            001AC    31          ST    1,PARMS+16   Store in params                                              
+ 000034 4110 C19C            0019C    32          LA    1,PARMS      Address of params in R13                                     
+ 000038 58A0 C060            00060    33          L     10,=V(BUILD) Load external sub                                            
+ 00003C 05EA                          34          BALR  14,10        Branch to sub                                                
+ 00003E 4110 C19C            0019C    35          LA    1,PARMS      Set params to R1                                             
+ 000042 58A0 C064            00064    36          L     10,=V(PRINT) Load external sub                                            
+ 000046 05EA                          37          BALR  14,10        Branch to sub                                                
+ 000048 4110 C19C            0019C    38          LA    1,PARMS                                                                   
+ 00004C 58A0 C068            00068    39          L     10,=V(HOWMANY) Load external sub                                          
+ 000050 05EA                          40          BALR  14,10                                                                     
+                                      41 *        LA    1,PARMS                                                                   
+                                      42 *        L     15,=V(PRINT)                                                              
+                                      43 *        BALR  14,10                                                                     
+                                      44 ***EXIT LINKAGE***************************                                               
+ 000052 58DD 0004            00004    45          L     13,4(13)                                                                  
+ 000056 98EC D00C            0000C    46          LM    14,12,12(13)                                                              
+ 00005A 07FE                          47          BR    14           End of subroutine                                            
+                                      48          LTORG                Literals are put here                                      
+ 000060 00000250                      49                =V(BUILD)                                                                 
+ 000064 00000358                      50                =V(PRINT)                                                                 
+ 000068 000004A0                      51                =V(HOWMANY)                                                               
+                                      52 ***STORAGE*********************************                                              
+1                                                                                                               PAGE    2         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 00006C                               53 TABLE    DS    75F'-16'                                                                  
+ 000198                               54 EOT      DS    0H                                                                        
+ 000198                               55 TABLELEN DS    F'0'                                                                      
+ 00019C                               56 PARMS    DS    5F'0'                                                                     
+ 0001B0                               57 RESULT   DS    F'0'                                                                      
+ 0001B4                               58 SAVEM    DS    18F                                                                       
+ 0001FC                               59 BUFF     DS    80C' '                                                                    
+ 00024C                               60 EXIT     DS    F                                                                         
+                                      61 ***********************************                                                      
+                                      62 *                                                                                        
+                                      63 *  Register usage:                                                                       
+                                      64 *    1        Used by XDECI/params                                                       
+                                      65 *    2        Number in base10                                                           
+                                      66 *    3        Table address                                                              
+                                      67 *    4        EOT address                                                                
+                                      68 *    5        Length of table address                                                    
+                                      69 *    6        Counter                                                                    
+                                      70 *   10        Base                                                                       
+                                      71 *   13        Save Location                                                              
+                                      72 *   14        return address                                                             
+                                      73 *   15        Base register                                                              
+                                      74 *                                                                                        
+                                      75 ***********************************                                                      
+ 000250                               76 BUILD    CSECT                                                                           
+                                      77 ***ENTRY LINKAGE*******************                                                      
+ 000250 90EC D00C            0000C    78          STM   14,12,12(13)                                                              
+ 000254 18CF                          79          LR    12,15                                                                     
+ 000250                               80          USING BUILD,12                                                                  
+ 000256 41E0 C0BC            0030C    81          LA    14,SAVEB                                                                  
+ 00025A 50D0 E004            00004    82          ST    13,4(,14)                                                                 
+ 00025E 50E0 D008            00008    83          ST    14,8(,13)                                                                 
+ 000262 18DE                          84          LR    13,14                                                                     
+ 000264 9835 1000            00000    85          LM    3,5,0(1)     Load params into R3,R4, and R5                               
+                                      86 ***BUILD BODY***********************                                                     
+ 000268 1B66                          87          SR    6,6          Clear R6 to use as a counter                                 
+ 00026A E000 C068 0050 002B8          88 BLOOP    XREAD BUFFER,80    Read a line from the input file                              
+ 000270 4740 C04E            0029E    89          BL    BEND         Check if read failed                                         
+ 000274 4110 C068            002B8    90          LA    1,BUFFER     Load the address of buffer into R1                           
+ 000278 5320 1000            00000    91 BLOOP1   XDECI 2,0(,1)     Read number from read line                                    
+ 00027C 4710 C01A            0026A    92          BO    BLOOP        Check if read failes                                         
+ 000280 5920 C060            002B0    93          C     2,=F'-123456789'                                                          
+ 000284 4780 C04E            0029E    94          BE    BEND                                                                      
+ 000288 5A60 C064            002B4    95          A     6,=F'1'      Add one to counter                                           
+ 00028C 5020 3000            00000    96          ST    2,0(,3)     Store number in table                                         
+ 000290 4130 3004            00004    97          LA    3,4(,3)     Advance the table pointer                                     
+ 000294 1934                          98          CR    3,4          Compare the table pointer to the EOT                         
+ 000296 4780 C04E            0029E    99          BE    BEND         If at EOT end build                                          
+ 00029A 47F0 C028            00278   100          B     BLOOP1       Goto top of loop                                             
+ 00029E                              101 BEND     DS    0H                                                                        
+ 00029E 5060 5000            00000   102          ST    6,0(,5)     Store the number of elements                                  
+                                     103 ***EXIT LINKAGE****************************                                              
+ 0002A2 58D0 D004            00004   104          L     13,4(,13)                                                                 
+ 0002A6 98EC D00C            0000C   105          LM    14,12,12(13)                                                              
+ 0002AA 07FE                         106          BR    14           End subroutine                                               
+                                     107          LTORG              Literals are put here                                        
+ 0002B0 F8A432EB                     108                =F'-123456789'                                                            
+ 0002B4 00000001                     109                =F'1'                                                                     
+1                                                                                                               PAGE    3         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                     110 ***STORAGE*********************************                                              
+ 0002B8                              111 BUFFER   DS    80C                                                                       
+ 000308 5C                           112          DC    C'*'                                                                      
+ 00030C                              113 SAVEB    DS    18F'0'                                                                    
+                                     114 ***********************************                                                      
+                                     115 *                                                                                        
+                                     116 *  Register usage:                                                                       
+                                     117 *    1        Used by XDECI/params                                                       
+                                     118 *    2        Line string location                                                       
+                                     119 *    3        Table address                                                              
+                                     120 *    4        EOT address                                                                
+                                     121 *    5        Length of table address                                                    
+                                     122 *    6        Width counter                                                              
+                                     123 *    7        Value from table                                                           
+                                     124 *   10        Base                                                                       
+                                     125 *   13        Save area                                                                  
+                                     126 *   14                                                                                   
+                                     127 *   15        Base register                                                              
+                                     128 *                                                                                        
+                                     129 ***********************************                                                      
+ 000358                              130 PRINT    CSECT                                                                           
+                                     131 ***ENTRY LINKAGE***********************                                                  
+ 000358 90EC D00C            0000C   132          STM   14,12,12(13)                                                              
+ 00035C 18CF                         133          LR    12,15                                                                     
+ 000358                              134          USING PRINT,12                                                                  
+ 00035E 41E0 C0A0            003F8   135          LA    14,SAVEC                                                                  
+ 000362 50D0 E004            00004   136          ST    13,4(,14)                                                                 
+ 000366 50E0 D008            00008   137          ST    14,8(,13)                                                                 
+ 00036A 18DE                         138          LR    13,14                                                                     
+ 00036C 9835 1000            00000   139          LM    3,5,0(1)     Load params into R3,R4, and R5                               
+                                     140 ***PRINT BODY**************************                                                  
+ 000370 E020 C0E8 000F 00440         141          XPRNT PHEAD,15     Print the table head                                         
+ 000376 5850 5000            00000   142          L     5,0(,5)     Load the lenght of the table                                  
+ 00037A 5860 C088            003E0   143 PLOOP    L     6,=F'6'      Counter for width of table                                   
+ 00037E 4120 C0F8            00450   144          LA    2,PLINE+1    Set R2 to the address of the print line                      
+ 000382 9240 C0F8      00450         145          MVI   PLINE+1,C' ' Clear the print line                                         
+ 000386 D252 C0F9 C0F8 00451 00450   146          MVC   PLINE+2(83),PLINE+1                                                       
+ 00038C 5950 C08C            003E4   147          C     5,=F'0'      Check if all values have been printed                        
+ 000390 4780 C07A            003D2   148          BE    PEND                                                                      
+ 000394 5950 C08C            003E4   149 PLOOP1   C     5,=F'0'      Check if all values have been printed                        
+ 000398 4780 C074            003CC   150          BE    PEND1                                                                     
+ 00039C 5870 3000            00000   151          L     7,0(,3)     Get current value from table                                  
+ 0003A0 5270 C094            003EC   152          XDECO 7,TEMP       Hex to base 10                                               
+ 0003A4 D20B 2000 C094 00000 003EC   153          MVC   0(12,2),TEMP Store base 10 num in print line                              
+ 0003AA 4120 200C            0000C   154          LA    2,12(,2)    Advance print line pointer                                    
+ 0003AE 4130 3004            00004   155          LA    3,4(,3)     Advance table pointer                                         
+ 0003B2 5B50 C090            003E8   156          S     5,=F'1'      Decrement table length counter                               
+ 0003B6 5B60 C090            003E8   157          S     6,=F'1'      Decrement line width counter                                 
+ 0003BA 5960 C08C            003E4   158          C     6,=F'0'      Check if we have filled a line                               
+ 0003BE 4770 C03C            00394   159          BNE   PLOOP1       Goto top of loop1                                            
+ 0003C2 E020 C0F7 004C 0044F         160          XPRNT PLINE,76     Print print line                                             
+ 0003C8 47F0 C022            0037A   161          B     PLOOP        Goto top of loop                                             
+ 0003CC E020 C0F7 004C 0044F         162 PEND1    XPRNT PLINE,76     Print printline                                              
+ 0003D2                              163 PEND     DS    0H                                                                        
+                                     164 ***EXIT LINKAGE**************************                                                
+ 0003D2 58D0 D004            00004   165          L     13,4(,13)                                                                 
+ 0003D6 98EC D00C            0000C   166          LM    14,12,12(13)                                                              
+1                                                                                                               PAGE    4         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 0003DA 07FE                         167          BR    14           End of subroutine                                            
+                                     168          LTORG              Literals are put here                                        
+ 0003E0 00000006                     169                =F'6'                                                                     
+ 0003E4 00000000                     170                =F'0'                                                                     
+ 0003E8 00000001                     171                =F'1'                                                                     
+                                     172 ***STORAGE*******************************                                                
+ 0003EC                              173 TEMP     DS    CL12                                                                      
+ 0003F8 0000000000000000             174 SAVEC    DC    18F'0'                                                                    
+ 000440 F1E38182938540C3             175 PHEAD    DC    CL15'1Table Contents'                                                     
+ 00044F F0                           176 PLINE    DC    CL1'0'                                                                    
+ 000450                              177          DS    CL75' '                                                                   
+                                     178 ***********************************                                                      
+                                     179 *                                                                                        
+                                     180 *  Register usage:                                                                       
+                                     181 *    3        Table pointer                                                              
+                                     182 *    4        EOT                                                                        
+                                     183 *    5                                                                                   
+                                     184 *    6        tally number                                                               
+                                     185 *    7                                                                                   
+                                     186 *    8                                                                                   
+                                     187 *    9        M                                                                          
+                                     188 *   10        Base                                                                       
+                                     189 *   13        Save Area                                                                  
+                                     190 *   14                                                                                   
+                                     191 *   15        Base register                                                              
+                                     192 *                                                                                        
+                                     193 ***********************************                                                      
+ 0004A0                              194 HOWMANY  CSECT                                                                           
+                                     195 ***ENTRY LINKAGE*********************                                                    
+ 0004A0 90EC D00C            0000C   196          STM   14,12,12(13)                                                              
+ 0004A4 18CF                         197          LR    12,15                                                                     
+ 0004A0                              198          USING HOWMANY,12                                                                
+ 0004A6 41E0 C0D4            00574   199          LA    14,SAVED                                                                  
+ 0004AA 50D0 E004            00004   200          ST    13,4(,14)                                                                 
+ 0004AE 50E0 D008            00008   201          ST    14,8(,13)                                                                 
+ 0004B2 18DE                         202          LR    13,14                                                                     
+ 0004B4 9837 1000            00000   203          LM    3,7,0(1)                                                                  
+                                     204 ***HOWMANY BODY**********************                                                    
+ 0004B8 1B99                         205          SR    9,9          clear out register 9                                         
+ 0004BA E000 C080 0050 00520         206 HLOOP    XREAD BUFFE1,80                                                                 
+ 0004C0 4740 C06A            0050A   207          BC    B'0100',HEND                                                              
+ 0004C4 5390 C080            00520   208          XDECI 9,BUFFE1     Data into 9                                                  
+ 0004C8 5880 C078            00518   209          L     8,=F'0'      load 1 into counter                                          
+ 0004CC 1934                         210 HLOOP2   CR    3,4                                                                       
+ 0004CE 47A0 C050            004F0   211          BC    B'1010',H2END                                                             
+ 0004D2 5873 0000            00000   212          L     7,0(3)                                                                    
+ 0004D6 4130 3004            00004   213          LA    3,4(0,3)     (move pointer over to next number)                           
+ 0004DA 5C60 C07C            0051C   214          M     6,=F'1'                                                                   
+ 0004DE 1D69                         215          DR    6,9                                                                       
+ 0004E0 5960 C078            00518   216          C     6,=F'0'                                                                   
+ 0004E4 4760 C02C            004CC   217          BC    B'0110',HLOOP2                                                            
+ 0004E8 5A80 C07C            0051C   218          A     8,=F'1'                                                                   
+ 0004EC 47F0 C02C            004CC   219          B     HLOOP2                                                                    
+ 0004F0                              220 H2END    DS    0H                                                                        
+ 0004F0 5390 C136            005D6   221          XDECI 9,NUM1                                                                    
+ 0004F4 5380 C146            005E6   222          XDECI 8,NUM2                                                                    
+ 0004F8 5290 C136            005D6   223          XDECO 9,NUM1                                                                    
+1                                                                                                               PAGE    5         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 0004FC 5290 C146            005E6   224          XDECO 9,NUM2                                                                    
+ 000500 E020 C11C 002A 005BC         225          XPRNT HLINE,42                                                                  
+ 000506 47F0 C01A            004BA   226          B     HLOOP                                                                     
+                                     227 ***EXIT LINKAGE*******************                                                       
+ 00050A                              228 HEND     DS    0H                                                                        
+ 00050A 58DD 0004            00004   229          L     13,4(13)                                                                  
+ 00050E 98EC D00C            0000C   230          LM    14,12,12(13)                                                              
+ 000512 07FE                         231          BR    14           End of subroutine                                            
+                                     232          LTORG              Literals are put here                                        
+ 000518 00000000                     233                =F'0'                                                                     
+ 00051C 00000001                     234                =F'1'                                                                     
+                                     235 ***STORAGE************************                                                       
+ 000520                              236 BUFFE1   DS    81C'*'                                                                    
+ 000574                              237 SAVED    DS    18F'0'                                                                    
+ 0005BC E388854095A49482             238 HLINE    DC    CL26'The number of multiples of'                                          
+ 0005D6 4040404040404040             239 NUM1     DC    CL12' '                                                                   
+ 0005E2 89A27A40                     240 HLINE2   DC    CL4'is: '                                                                 
+ 0005E6 4040404040404040             241 NUM2     DC    CL12' '                                                                   
+                                     242 ***********************************                                                      
+                                     243          END   MAIN                                                                      
+0***  NO   STATEMENTS FLAGGED -  NO   WARNINGS,  NO   ERRORS                                                                      
+0*** DYNAMIC CORE AREA USED:  LOW:   10032 HIGH:    1284 LEAVING:  482252 FREE BYTES. AVERAGE:       46 BYTES/STMT ***            
+0*** ASSEMBLY TIME =    0.000 SECS,   244000 STATEMENTS/SEC ***                                                                   
+0*** PROGRAM EXECUTION BEGINNING - ANY OUTPUT BEFORE EXECUTION TIME MESSAGE IS PRODUCED BY USER PROGRAM ***                       
+0*** EXECUTION TIME =    0.000 SECS.       946 INSTRUCTIONS EXECUTED -   946000 INSTRUCTIONS/SEC ***                              
+1 ASSIST COMPLETION DUMP                                                                                                          
+0PSW AT ABEND FFC50001 D0000054       COMPLETION CODE   SYSTEM = 0C1 OPERATION                                                    
+0** TRACE OF INSTRUCTIONS JUST BEFORE TERMINATION: PSW BITS SHOWN ARE THOSE BEFORE CORRESPONDING INSTRUCTION DECODED ***          
+0  IM LOCATION    INSTRUCTION :  IM = PSW BITS 32-39(ILC,CC,MASK) BEFORE INSTRUCTION EXECUTED AT PROGRAM LOCATION SHOWN           
+0  10  000254     18CF                                                                                                            
+0  50  000256     41E0 C0BC                                                                                                       
+0  90  00025A     50D0 E004                                                                                                       
+0  90  00025E     50E0 D008                                                                                                       
+0  90  000262     18DE                                                                                                            
+0  50  000264     9835 1000                                                                                                       
+0  90  000268     1B66                                                                                                            
+0  40  00026A     E000 C068 0050                                                                                                  
+0  D0  000270     4740 C04E                                                                                                       
+0  90  00004E     C068 05EA 58DD  <-- LAST INSTRUCTION DONE - PROBABLE CAUSE OF TERMINATION                                       
+0                                                                                                                                 
+-** TRACE OF LAST 10 BRANCH INSTRUCTIONS EXECUTED: PSW BITS SHOWN ARE THOSE BEFORE CORRESPONDING INSTRUCTION DECODED ***          
+0  IM LOCATION    INSTRUCTION :  IM = PSW BITS 32-39(ILC,CC,MASK) BEFORE INSTRUCTION EXECUTED AT PROGRAM LOCATION SHOWN           
+0  10  00003C     05EA                                                                                                            
+0  50  00029A     47F0 C028                                                                                                       
+0  90  00003C     05EA                                                                                                            
+0  50  00029A     47F0 C028                                                                                                       
+0  90  00003C     05EA                                                                                                            
+0  50  00029A     47F0 C028                                                                                                       
+0  90  00003C     05EA                                                                                                            
+0  50  00029A     47F0 C028                                                                                                       
+0  90  00003C     05EA                                                                                                            
+0  50  000270     4740 C04E                                                                                                       
+0 REGS 0-7      F4F4F4F4    0000019C    0000032B    0000006C    00000198    0000006B    00000000    F4F4F4F4                      
+  REGS 8-15     F4F4F4F4    F4F4F4F4    00000250    F4F4F4F4    00000000    000000BC    000000BC    00000000                      
+0 FLTR 0-6      F4F4F4F4F4F4F4F4        F4F4F4F4F4F4F4F4        F4F4F4F4F4F4F4F4        F4F4F4F4F4F4F4F4                          
+1 USER STORAGE                                                                                                                    
+0                             CORE ADDRESSES SPECIFIED-     000000 TO 000740                                                      
+ 000000   90ECD00C 18CF41E0 C1B450D0 E00450E0    D00818DE 4110C06C 5010C19C 4110C198   *........A.................A...A.*         
+ 000020   5010C1A0 4110C198 5010C1A4 4110C1B0    5010C1AC 4110C19C 58A0C060 05EA4110   *..A...A...A...A...A...A.........*         
+ 000040   C19C58A0 C06405EA 4110C19C 58A0C068    05EA58DD 000498EC D00C07FE F5F5F5F5   *A.........A.................5555*         
+ 000060   00000250 00000358 F8F1F140 0000032B    40404040 40404040 40404040 40404040   *........811 ....                *         
+ 000080   40404040 40404040 40404040 40404040    40404040 40404040 40404040 40404040   *                                *         
+ 0000A0   40404040 40404040 40404040 40404040    40404040 40404040 F5F5F5F5 F5F5F5F5   *                        55555555*         
+ 0000C0   000000BC 000000BC 5000003E 00000000    F4F4F4F4 0000019C 0000032B 00000070   *................4444............*         
+ 0000E0   00000198 0000006A 00000358 F4F4F4F4    F4F4F4F4 F4F4F4F4 00000250 F4F4F4F4   *............444444444444....4444*         
+ 000100   00000000 F5F5F5F5 F5F5F5F5 F5F5F5F5    F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5   *....5555555555555555555555555555*         
+ 000120   F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5    F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5   *55555555555555555555555555555555*         
+   LINES    000140-000160    SAME AS ABOVE                                                                                        
+ 000180   F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5    F5F5F5F5 F5F5F5F5 F5F5F5F5 0000006C   *5555555555555555555555555555....*         
+ 0001A0   00000198 0000006B F5F5F5F5 000001B0    F5F5F5F5 F5F5F5F5 000005F8 000000BC   *........5555....55555555...8....*         
+ 0001C0   4000003E 00000000 F4F4F4F4 0000019C    F4F4F4F4 F4F4F4F4 F4F4F4F4 F4F4F4F4   * .......4444....4444444444444444*         
+ 0001E0   F4F4F4F4 F4F4F4F4 F4F4F4F4 F4F4F4F4    00000250 F4F4F4F4 00000000 F5F5F5F5   *4444444444444444....4444....5555*         
+ 000200   F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5    F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5   *55555555555555555555555555555555*         
+   LINES    000220-000220    SAME AS ABOVE                                                                                        
+ 000240   F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5    90ECD00C 18CF41E0 C0BC50D0 E00450E0   *5555555555555555................*         
+ 000260   D00818DE 98351000 1B66E000 C0680050    4740C04E 4110C068 53201000 4710C01A   *................. ..............*         
+ 000280   5920C060 4780C04E 5A60C064 50203000    41303004 19344780 C04E47F0 C0285060   *...........................0....*         
+ 0002A0   500058D0 D00498EC D00C07FE F5F5F5F5    F8A432EB 00000001 F5F5F5F5 F5F5F5F5   *............55558.......55555555*         
+ 0002C0   F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5    F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5   *55555555555555555555555555555555*         
+   LINES    0002E0-0002E0    SAME AS ABOVE                                                                                        
+ 000300   F5F5F5F5 F5F5F5F5 5CF5F5F5 F5F5F5F5    F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5   *55555555.55555555555555555555555*         
+ 000320   F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5    F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5   *55555555555555555555555555555555*         
+ 000340   F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5    F5F5F5F5 F5F5F5F5 90ECD00C 18CF41E0   *555555555555555555555555........*         
+ 000360   C0A050D0 E00450E0 D00818DE 98351000    E020C0E8 000F5850 50005860 C0884120   *...................Y............*         
+ 000380   C0F89240 C0F8D252 C0F9C0F8 5950C08C    4780C07A 5950C08C 4780C074 58703000   *.8. .8K..9.8....................*         
+ 0003A0   5270C094 D20B2000 C0944120 200C4130    30045B50 C0905B60 C0905960 C08C4770   *....K...........................*         
+ 0003C0   C03CE020 C0F7004C 47F0C022 E020C0F7    004C58D0 D00498EC D00C07FE F5F5F5F5   *.....7...0.....7............5555*         
+ 0003E0   00000006 00000000 00000001 F5F5F5F5    F5F5F5F5 F5F5F5F5 00000000 00000000   *............555555555555........*         
+ 000400   00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000   *................................*         
+   LINES    000420-000420    SAME AS ABOVE                                                                                        
+ 000440   F1E38182 938540C3 9695A385 95A3A2F0    F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5   *1T.... C.......05555555555555555*         
+ 000460   F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5    F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5   *55555555555555555555555555555555*         
+   LINES    000480-000480    SAME AS ABOVE                                                                                        
+ 0004A0   90ECD00C 18CF41E0 C0D450D0 E00450E0    D00818DE 98371000 1B99E000 C0800050   *.........M......................*         
+ 0004C0   4740C06A 5390C080 5880C078 193447A0    C0505873 00004130 30045C60 C07C1D69   *. ..............................*         
+ 0004E0   5960C078 4760C02C 5A80C07C 47F0C02C    5390C136 5380C146 5290C136 5290C146   *.............0....A...A...A...A.*         
+ 000500   E020C11C 002A47F0 C01A58DD 000498EC    D00C07FE F5F5F5F5 00000000 00000001   *..A....0............5555........*         
+ 000520   F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5    F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5   *55555555555555555555555555555555*         
+   LINES    000540-000580    SAME AS ABOVE                                                                                        
+ 0005A0   F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5    F5F5F5F5 F5F5F5F5 F5F5F5F5 E3888540   *5555555555555555555555555555T.. *         
+ 0005C0   95A49482 85994096 864094A4 93A38997    9385A240 96864040 40404040 40404040   *...... .. ......... ..          *         
+ 0005E0   404089A2 7A404040 40404040 40404040    4040F5F5 F5F5F5F5 F5F5F5F5 00000000   *  ...             5555555555....*         
+ 000600   000001B4 FFFE7960 00000000 F4F4F4F4    F4F4F4F4 F4F4F4F4 F4F4F4F4 F4F4F4F4   *............44444444444444444444*         
+ 000620   F4F4F4F4 F4F4F4F4 F4F4F4F4 F4F4F4F4    F4F4F4F4 F4F4F4F4 F4F4F4F4 F4F4F4F4   *44444444444444444444444444444444*         
+ 000640   F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5    F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5   *55555555555555555555555555555555*         
+   LINES    000660-000700    SAME AS ABOVE                                                                                        
+0                                                                                                                                 

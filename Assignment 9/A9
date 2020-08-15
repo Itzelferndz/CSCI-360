@@ -1,0 +1,34 @@
+//KC03C9DS JOB ,'ITZEL FERNANDEZ',MSGCLASS=H
+//STEP1   EXEC  PGM=ASSIST,PARM='MACRO=H'
+//STEPLIB   DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT  DD  SYSOUT=*
+//SYSIN     DD  *
+         MACRO
+         STRLEN &STR,&LEN
+         AIF    ('&STR' EQ ' ').ERROR
+         AIF    ('&LEN' EQ ' ').ERROR
+         B      D&SYSNDX
+A&SYSNDX DS     F
+B&SYSNDX DS     F
+C&SYSNDX DS     F
+D&SYSNDX ST     4,A&SYSNDX
+         ST     5,B&SYSNDX
+         ST     6,C&SYSNDX
+         SR     6,6
+         LA     4,&STR
+E&SYSNDX ICM    5,B'1000',0(4)
+         CLM    5,B'1000',=X'00'
+         BE     F&SYSNDX
+         LA     6,=F'1'
+         B      E&SYSNDX
+F&SYSNDX ST     6,&LEN
+         L      5,B&SYSNDX
+         L      6,C&SYSNDX
+         L      4,A&SYSNDX
+         MEXIT
+.ERROR   MNOTE  'MISSING ARGUMENT'
+         MEND
+//          DD DSN=KC02314.SPRING20.CSCI360.HW9DRVR,DISP=SHR
+//FT05F001  DD DUMMY
+//FT06F001  DD SYSOUT=*
+//

@@ -1,0 +1,472 @@
+//KC03C9DS JOB ,'ITZEL FERNANDEZ',MSGCLASS=H
+//STEP1 EXEC PGM=ASSIST
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT DD SYSOUT=*
+//SYSIN DD *
+**************************************************
+* ASSIGNMENT 8
+*
+* NAME: ITZEL FERNANDEZ
+*
+* PURPOSE: TO READ IN UNALIGNED DATA AND SORT IT
+*
+* REGISTER USAGE:
+*          REG 1,12,13,14,15 -> STORAGE
+*
+*
+**************************************************
+MAIN     CSECT
+*    <Linking into storage area>
+         STM   14,12,12(13)
+         LR    12,15
+         USING MAIN,12
+         LA    14,MAINSAVE
+         ST    13,4(0,14)
+         ST    14,8(0,13)
+         LR    13,14
+*    <Branching to build>
+         LA    1,BLIST
+         L     15,=V(BUILD)
+         BALR  14,15
+         XDUMP TABLE
+*
+         XPRNT MAINHED,51
+         XPRNT HEADERS,51
+         XPRNT BORDERS,51
+*
+*    <Branching to print>
+         LA    1,PLIST
+         L     15,=V(PRINT)
+         BALR  14,15
+*
+*    <Branching to SortId>
+         LA    1,SLIST
+         L     15,=V(SORTID)
+         BALR  14,15
+*    <BRANCHING TO PRINT>
+         LA    1,PLIST
+         L     15,=V(PRINT)
+         BALR  14,15
+*    <EXIT LINKAGE>
+         L     13,4(,13)
+         LM    14,12,12(13)
+*
+         BR    14
+*
+         LTORG
+MAINSAVE DS    18F
+         ORG MAIN+((*-MAIN+31)/32)*32
+TABLE    DS    20CL15
+EOT      DS    C' '
+CURRENT  DC    F'0'
+MAINHED  DC    C' 1'
+         DC    CL15' '
+         DC    C'Initial Table Contents'
+         DC    CL15' '
+HEADERS  DC    C' '
+         DC    C'ID Number'
+         DC    CL3' '
+         DC    C'PASSWORD'
+         DC    CL4' '
+         DC    C'WEEKDAY'
+         DC    CL6' '
+         DC    C'TIME'
+         DC    CL5' '
+         DC    C'ROOM'
+BORDERS  DC    C' '
+         DC    C'---------'
+         DC    CL3' '
+         DC    C'--------'
+         DC    CL4' '
+         DC    C'-------'
+         DC    CL6' '
+         DC    C'----'
+         DC    CL5' '
+         DC    C'----'
+BLIST    DC    A(TABLE,EOT,CURRENT)
+PLIST    DC    A(TABLE,EOT,CURRENT)
+SLIST    DC    A(TABLE,EOT,CURRENT)
+**************************************************
+* SUBROUTINE: BUILD
+*
+* PURPOSE: TO BUILD THE TABLE
+*
+* REGISTERS USED:
+*        STORAGE = R1,R12-R15
+*        BINARY  = R5-R7
+*        TABLE   = R2-R4
+**************************************************
+BUILD    CSECT
+*  <Entry Linkage>
+         STM   14,12,12(13)
+         LR    12,15
+         USING BUILD,12
+         LA    14,BSAVE
+         ST    13,4(0,14)
+         ST    14,8(0,13)
+         LR    13,14
+         SR    5,5
+*  <Loading Builds parameter list>
+         LM    2,4,0(1)
+***** <Read into buffer> ********************
+*
+LOOP     SR    5,5
+         SR    6,6
+         SR    7,7
+         XREAD BUFFER,80
+         BL    ENDLOOP
+*
+***** <ID STORAGE> **************************
+*    <Take ID out of buffer>
+         MVC   ID(7),BUFFER+1
+*    <Pack ID into PID>
+         PACK  PID,ID(7)
+*    <Convert PID to binary and store in 5>
+         CVB   5,PID
+*    <Store 5 into table>
+         STCM  5,B'1111',0(2)
+*
+***** <Password Storage> ********************
+*    <Take password out of buffer>
+         MVC   PASS(8),BUFFER+12
+*    <Store password into table>
+         MVC   4(8,2),PASS
+*    <Encrypt password>
+         XC    4(4,2),0(2)
+         XC    8(4,2),0(2)
+*
+***** <Days of The Week Storage> ************
+*    <Setting up character compare>
+         CLC   DAY0(3),BUFFER+24
+         BC    B'1000',SUN
+*
+         CLC   DAY1(3),BUFFER+24
+         BC    B'1000',MON
+*
+         CLC   DAY2(3),BUFFER+24
+         BC    B'1000',TUE
+*
+         CLC   DAY3(3),BUFFER+24
+         BC    B'1000',WED
+*
+         CLC   DAY4(3),BUFFER+24
+         BC    B'1000',THU
+*
+         CLC   DAY5(3),BUFFER+24
+         BC    B'1000',FRI
+*
+         CLC   DAY6(3),BUFFER+24
+         BC    B'1000',SAT
+*    <Adding day of week to table>
+SUN      PACK  CON0(8),=CL1'0'
+         CVB   6,CON0
+         SLL   6,21
+         B     TIME
+MON      PACK  CON1(8),=CL1'1'
+         CVB   6,CON1
+         SLL   6,21
+         B     TIME
+TUE      PACK  CON2(8),=CL1'2'
+         CVB   6,CON2
+         SLL   6,21
+         B     TIME
+WED      PACK  CON3(8),=CL1'3'
+         CVB   6,CON3
+         SLL   6,21
+         B     TIME
+THU      PACK  CON4(8),=CL1'3'
+         CVB   6,CON4
+         SLL   6,21
+         B     TIME
+FRI      PACK  CON5(8),=CL1'4'
+         CVB   6,CON5
+         SLL   6,21
+         B     TIME
+SAT      PACK  CON6(8),=CL1'5'
+         CVB   6,CON6
+         SLL   6,21
+         B     TIME
+*
+***** <Time Storage> ************************
+*
+TIME     SR    7,7
+**   <Hour Storage>
+*    <Take Hour our of buffer>
+         MVC   HOUR(2),BUFFER+37
+*    <Pack hour into PHour>
+         PACK  PHOUR(8),HOUR
+*    <Convert PHOUR to binary, store in 7>
+         CVB   7,PHOUR
+*    <Store 5 into table>
+         SLL   7,16
+         XR    6,7
+         SR    7,7
+**   <Minute Storage>
+*    <Take min out of buffer>
+         MVC   MIN(2),BUFFER+40
+*    <Pack min into PMin>
+         PACK  PMIN,MIN
+*    <Convert PMIN to binary, store in 7>
+         CVB   7,PMIN
+*    <Shift 7 by 20 bits>
+         SLL   7,10
+*    <Store into register 6>
+         XR    6,7
+*
+***** <Room number storage area> ************
+*
+         SR    7,7
+*    <Take room number out of buffer>
+         MVC   NUM(3),BUFFER+46
+*    <Pack NUM into PNUM>
+         PACK  PNUM,NUM
+*    <Convert PNUM to binary and store in 7>
+         CVB   7,PMIN
+*    <Store into register 6>
+         XR    6,7
+*
+***** <Add all to table> ********************
+*
+         STCM  6,B'0111',12(2)
+*        XDUMP 0(2)
+         A     4,=F'1'
+         LA    2,15(2)
+         CR    2,3
+         BC    B'1000',ENDLOOP
+         B     LOOP
+*
+***** <Exit linkage> ************************
+ENDLOOP  L     13,4(0,13)
+         LM    14,12,12(13)
+         BR    14
+*
+         LTORG
+BSAVE    DS    18F
+CRG      DC    C' '
+BUFFER   DS    CL80
+ID       DS    CL7
+FILLER1  DS    D
+PID      DS    PL8
+PIDOUT   DS    CL8
+PASS     DS    CL8
+DAY0     DC    C'Sunday'
+DAY1     DC    C'Monday'
+DAY2     DC    C'Tuesday'
+DAY3     DC    C'Wednesday'
+DAY4     DC    C'Thursday'
+DAY5     DC    C'Friday'
+DAY6     DC    C'Saturday'
+HOUR     DS    CL2
+MIN      DS    CL2
+FILLER2  DS    D
+PMIN     DS    PL8
+PHOUR    DS    D
+CON0     DS    D
+CON1     DS    D
+CON2     DS    D
+CON3     DS    D
+CON4     DS    D
+CON5     DS    D
+CON6     DS    D
+NUM      DS    CL3
+SMALL    DS    CL3
+PNUM     DS    D
+**************************************************
+* SUBROUTINE: PRINT
+*
+* PURPOSE: TO PRINT THE TABLE IN A PROPER FORMAT
+*
+* REGISTERS USED:
+*        STORAGE = R1,R12-R15
+*     CVD/MVC/ED = R5-R7
+*          TABLE = R2-R4
+*
+*************************************************
+PRINT    CSECT
+*  <Entry Linkage>
+         STM   14,12,12(13)
+         LR    12,15
+         USING PRINT,12
+         LA    14,PSAVE
+         ST    13,4(0,14)
+         ST    14,8(0,13)
+         LR    13,14
+         SR    8,8
+         LM    2,4,0(1)
+***** <Print the table> *********************
+*  <begin loop>
+LOOP2    A     8,=F'1'
+         C     8,=F'17'
+         BC    B'1000',ENDLOOP2
+         SR    5,5
+         ICM   5,B'1111',0(2)
+         CVD   5,PIDNUM
+*
+***** <Grab ID from table> ******************
+*
+         MVC   IDNUM(8),=X'40212020202020202020'
+         ED    IDNUM(8),PIDNUM+4
+         MVC   PLINE(8),IDNUM
+*
+***** <decrypt password> ********************
+*
+         XC    4(4,2),0(2)
+         XC    8(4,2),0(2)
+         MVC   PLINE+12(8),4(2)
+*
+*  <Move the three of Table onto register 6>
+         SR    6,6
+         ICM   6,B'0111',12(2)
+*  <Shift to grab the day>
+         SRL   6,21
+         CH    6,=H'0'
+*
+         BC    B'1000',RVT0
+         CH    6,=H'1'
+         BC    B'1000',RVT1
+         CH    6,=H'2'
+         BC    B'1000',RVT2
+         CH    6,=H'3'
+         BC    B'1000',RVT3
+         CH    6,=H'4'
+         BC    B'1000',RVT4
+         CH    6,=H'5'
+         BC    B'1000',RVT5
+         CH    6,=H'6'
+         BC    B'1000',RVT6
+*  <Shift to grab the hour>
+MYLINE   SR    6,6
+         ICM   6,B'1111',12(2)
+         SLL   6,3
+         SRL   6,27
+         CVD   6,MYPHOUR
+         MVC   MYHOUR(8),=X'40202020202020202020'
+         ED    MYHOUR(8),MYPHOUR+6
+         MVC   PLINE+35(8),MYHOUR
+         MVC   PLINE+39(3),COLON
+*
+         SR    6,6
+         ICM   6,B'1111',12(2)
+         SLL   6,8
+         SRL   6,26
+         CVD   6,MYPMIN
+         MVC   MYMIN(8),=X'40212020202020202020'
+         ED    MYMIN(8),MYPMIN+6
+         MVC   PLINE+40(8),MYMIN+2
+         MVC   PLINE+42(8),SPACEOUT
+*
+         SR    6,6
+         ICM   6,B'1111',12(2)
+         SLL   6,14
+         SRL   6,22
+         CVD   6,MYPROOM
+         MVC   MYROOM(8),=X'40212020202020202020'
+         ED    MYROOM(8),MYPROOM+6
+         MVC   PLINE+44(8),MYROOM
+*
+         XPRNT CBG,81
+         LA    2,15(0,2)
+         B     LOOP2
+***** <Branches to fill in the day> *********
+*
+*
+RVT0     MVC   PLINE+24(10),SUND
+         B     MYLINE
+*
+RVT1     MVC   PLINE+24(10),MOND
+         B     MYLINE
+*
+RVT2     MVC   PLINE+24(10),TUES
+         B     MYLINE
+*
+RVT3     MVC   PLINE+24(10),WEDN
+         B     MYLINE
+*
+RVT4     MVC   PLINE+24(10),THUR
+         B     MYLINE
+*
+RVT5     MVC   PLINE+24(10),FRID
+         B     MYLINE
+*
+RVT6     MVC   PLINE+24(10),SATU
+         B     MYLINE
+ENDLOOP2 L     13,4(,13)
+         LM    14,12,12(13)
+         BR    14
+*
+         LTORG
+PSAVE    DS    18F
+BUFFER2  DS    CL80
+PIDNUM   DS    D
+CBG      DC    C' '
+PLINE    DC    CL80' '
+IDNUM    DS    CL7
+PW       DS    D
+PDW      DS    D
+DW       DS    CL1
+SUND     DC    C'Sunday         '
+MOND     DC    C'Monday         '
+TUES     DC    C'Tuesday        '
+WEDN     DC    C'Wednesday      '
+THUR     DC    C'Thursday       '
+FRID     DC    C'Friday         '
+SATU     DC    C'Saturday       '
+MYPHOUR  DS    D
+MYHOUR   DS    CL8
+MYPMIN   DS    D
+MYMIN    DS    CL8
+MYPROOM  DS    D
+MYROOM   DS    CL8
+COLON    DC    C':  '
+SPACEOUT DC    C'  
+***********************************************                                          
+*   SORT THE TABLE BY ID NUMBER                                                                                      
+*                                                                                        
+*   R12 BASE                                                                                     
+*   R2  TABLE                                                                                     
+*   R3  EOT                                                                                   
+*                                                                                     
+*                                                                                        
+*                                                                                        
+*                                                                                        
+*********************************************** 
+SORTID   CSECT
+         STM   14,12,12(13)
+         LR    12,15
+         USING SORTID,12
+         LA    14,SAVED
+         ST    13,4(,14)
+         ST    14,8(,13)
+         LR    13,14
+         LM    2,3,0(1)
+***ENTRY LINKAGE****************
+         L     0,0(,3)
+         S     3,=F'15'
+         LR    4,2
+SLOOP    CR    2,3
+         BC    B'1010',SEND
+         LR    4,2
+SLOOP2   CR    4,3
+         BC    B'1010',SEND1
+         LR    5,4
+         LA    4,15(,4)
+S        CLC   0(4,4),0(5)
+         BC    B'1010',ENDS
+         MVC   STEMP(15),0(4)
+         MVC   0(15,4),0(5)
+         MVC   0(15,5),STEMP
+ENDS     B     SLOOP2
+SEND1    S     3,=F'15'
+         B     SLOOP
+***EXIT LINKAGE*****************
+SEND     DS    0H
+         L     13,4(,13)
+         LM    14,12,12(13)
+         BR    14                    End of subroutine
+         LTORG                       Literals are put here
+SAVED    DS    18F'0'
+STEMP    DS    15C
+         END   MAIN
+/*
+//FT05F001   DD  DSN=KC02314.SPRING20.CSCI360.HW8DATA,DISP=SHR
+//

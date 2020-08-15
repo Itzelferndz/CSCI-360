@@ -1,0 +1,110 @@
+//KC03C9DS JOB ,'ITZEL FERNADEZ',MSGCLASS=H
+//STEP1    EXEC  PGM=ASSIST
+//STEPLIB    DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT   DD  SYSOUT=*
+//SYSIN      DD  *
+****************************************************
+*
+* Assignment: Extra credit(B)
+* Name: ITZEL FERNANDEZ
+*
+*****************************************************
+LINE     DSECT     Format for Table
+NUM1     DS     CL6
+         DS     CL2
+NUM2     DS     CL6
+******************************************************
+*Name: Main
+*
+* compute the value of the first
+* number as the nearest multiple of the second number
+*******************************************************
+MAIN     CSECT
+         USING MAIN,15
+         ST    14,EXIT      Save Exit Location
+         LA    13,SAVE1     Set the save area
+*
+         USING LINE,12      set dsect LINE to R12
+         XPRNT HEAD,45      Print the haedder
+LOOP     DS    0H
+         XREAD BUFFER,80    Read Buffer
+         BL    MLOOP        End loop
+         MVC   FA(6),=X'402020202120'
+         MVC   FB(6),=X'402020202120'
+         MVC   FR(6),=X'402020202120'
+         LA    12,BUFFER    set location of BUFFER
+         PACK  A(6),NUM1(6) Pack A
+         PACK  B(6),NUM2(6) Pack B
+         LA    1,FA+5       sign location
+         EDMK  FA(6),A+3    Format A
+         CP    A(6),=PL1'0' check if negative
+         BNL   FIRST
+         BCTR  1,0          decrement by 1
+         MVI   0(1),C'-'    negative
+FIRST    DS    0H
+         LA    1,FB+5       sign location
+         EDMK  FB(6),B+3    format B
+         CP    B(6),=PL1'0' check if negative
+         BNL   SECND
+         BCTR  1,0          decrement by 1
+         MVI   0(1),C'-'    negative
+SECND    DS    0H
+         ZAP   C(6),A(6)    C = A
+         DP    C(6),B+3(3)  divide
+         ZAP   D(7),C+3(3)  remainder = D
+         ZAP   C(6),C(3)    format C
+         ZAP   R(8),C(6)    R = C
+         MP    R(8),B(6)    multiply
+         ZAP   E(7),B(6)    E = B
+         CP    E(7),=PL1'0' check if negative
+         BNL    SKIP
+         MP    E(7),=PL1'-1' positive
+SKIP     DS    0H
+         MP    D(7),=PL1'2'  multiply
+         CP    D(7),=PL1'0'  check if negative
+         BNL   FOUR
+         MP    D(7),=PL1'-1' make positive
+FOUR     DS    0H
+         CP    D(7),E(7)
+         BL    PRNT
+         CP    A(6),=PL1'0'  check if positive
+         BNH   ELSE
+         AP    R(8),E(7)
+         B     PRNT
+ELSE     DS    0H
+         SP    R(8),E(7)
+PRNT     DS    0H
+         LA    1,FR+5        sign location
+         EDMK  FR(6),R+5
+         CP    R(8),=PL1'0'  check if negative
+         BNL   THIRD
+         BCTR  1,0           decrement by 1
+         MVI   0(1),C'-'
+THIRD    DS    0H
+         XPRNT PLINE,41
+         B     LOOP
+MLOOP    DS    0H
+*
+         L     14,EXIT      Load exit location
+         BR    14           End program
+         LTORG              Literals are put here
+SAVE1    DS    18F'0'
+EXIT     DS    F
+BUFFER   DS    80C
+A        DS    PL6
+B        DS    PL6
+C        DS    PL6
+D        DS    PL7
+E        DS    PL7
+R        DS    PL8
+PLINE    DC    CL3'0  '
+FA       DS    6C
+         DC    CL10'          '
+FB       DS    6C
+         DC    CL10'          '
+FR       DS    6C
+HEAD     DC    CL45'1First Number   Second Number   Rounded Value'
+         END   MAIN
+/*
+//FT05F001  DD  DSN=KC02314.AUTUMN19.CSCI360.HWEXDATA,DISP=SHR
+//

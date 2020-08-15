@@ -1,0 +1,15 @@
+//KC03C9DS JOB ,'ITZEL FERNANDEZ',MSGCLASS=H
+//STEP1 EXEC PGM=ASSIST
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT DD SYSOUT=*
+//SYSIN DD *
+*******************************************************
+MAIN      CSECT
+          USING MAIN,15
+          SR    1,4
+          SR    1,4
+          XDUMP
+          BR    14
+          END   MAIN 
+/*
+// 

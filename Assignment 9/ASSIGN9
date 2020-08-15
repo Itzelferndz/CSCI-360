@@ -1,0 +1,38 @@
+//KC03C9DS JOB ,'ITZEL FERNANDEZ',MSGCLASS=H
+//STEP1   EXEC  PGM=ASSIST,PARM='MACRO=H'
+//STEPLIB    DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT   DD  SYSOUT=*
+//SYSIN      DD  *
+****************************************************************
+*Name: STRLEN
+*
+* Calculate the length of a C-style string using &STR and &LEN
+****************************************************************
+         MACRO                      Start Macro code
+         STRLEN &STR,&LEN           2 params
+         AIF   ('&STR' EQ '').ERROR
+         AIF   ('&LEN' EQ '').ERROR
+*
+         STM   2,3,A&SYSNDX
+         B     B&SYSNDX
+A&SYSNDX DS    3F
+B&SYSNDX LA    2,&STR                Store pointer
+         LA    3,&LEN                Store pointer
+         SR    4,4                   make a counter
+C&SYSNDX DS    0H
+         CLI   0(2),X'00'            check if end
+         BE    D&SYSNDX              end of macro
+         LA    2,1(,2)               advance pointer
+         A     4,=F'1'               increment by 1
+         B     C&SYSNDX
+D&SYSNDX DS    0H
+         ST    4,0(3)
+         LM    2,4,A&SYSNDX
+         MEXIT
+.ERROR   MNOTE 'Missing Argument'
+         MEND
+/*
+//          DD DSN=KC02314.SPRING20.CSCI360.HW9DRVR,DISP=SHR
+//FT05F001  DD DUMMY
+//FT06F001  DD SYSOUT=*
+//

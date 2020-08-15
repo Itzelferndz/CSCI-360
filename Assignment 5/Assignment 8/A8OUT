@@ -1,0 +1,600 @@
+1                   J E S 2  J O B  L O G  --  S Y S T E M  2 9 6 4  --  N O D E  S V S C J E S 2        
+0 
+ 23.10.15 JOB04393 ---- FRIDAY,    24 APR 2020 ----
+ 23.10.15 JOB04393  IRR010I  USERID KC03C9D  IS ASSIGNED TO THIS JOB.
+ 23.10.16 JOB04393  ICH70001I KC03C9D  LAST ACCESS AT 22:45:39 ON FRIDAY, APRIL 24, 2020
+ 23.10.16 JOB04393  $HASP373 KC03C9DS STARTED - INIT 2    - CLASS A        - SYS 2964
+ 23.10.16 JOB04393  $HASP395 KC03C9DS ENDED - RC=0000
+0------ JES2 JOB STATISTICS ------
+-  24 APR 2020 JOB EXECUTION DATE
+-          471 CARDS READ
+-          597 SYSOUT PRINT RECORDS
+-            0 SYSOUT PUNCH RECORDS
+-           43 SYSOUT SPOOL KBYTES
+-         0.00 MINUTES EXECUTION TIME
+         1 //KC03C9DS JOB ,'ITZEL FERNANDEZ',MSGCLASS=H                            JOB04393
+         2 //STEP1 EXEC PGM=ASSIST                                                         
+         3 //STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                                
+         4 //SYSPRINT DD SYSOUT=*                                                          
+         5 //SYSIN DD *                                                                    
+         6 //FT05F001   DD  DSN=KC02314.SPRING20.CSCI360.HW8DATA,DISP=SHR                  
+ ICH70001I KC03C9D  LAST ACCESS AT 22:45:39 ON FRIDAY, APRIL 24, 2020
+ IEFA111I KC03C9DS IS USING THE FOLLOWING JOB RELATED SETTINGS:
+          SWA=ABOVE,TIOT SIZE=32K,DSENQSHR=DISALLOW,GDGBIAS=JOB
+ IEF236I ALLOC. FOR KC03C9DS STEP1
+ IGD103I SMS ALLOCATED TO DDNAME STEPLIB
+ IEF237I JES2 ALLOCATED TO SYSPRINT
+ IEF237I JES2 ALLOCATED TO SYSIN
+ IGD103I SMS ALLOCATED TO DDNAME FT05F001
+ IEF142I KC03C9DS STEP1 - STEP WAS EXECUTED - COND CODE 0000
+ IGD104I KC02293.ASSIST.LOADLIB                       RETAINED,  DDNAME=STEPLIB 
+ IEF285I   KC03C9D.KC03C9DS.JOB04393.D0000102.?         SYSOUT        
+ IEF285I   KC03C9D.KC03C9DS.JOB04393.D0000101.?         SYSIN         
+ IGD104I KC02314.SPRING20.CSCI360.HW8DATA             RETAINED,  DDNAME=FT05F001
+ IEF373I STEP/STEP1   /START 2020115.2310
+ IEF032I STEP/STEP1   /STOP  2020115.2310 
+         CPU:     0 HR  00 MIN  00.00 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+         VIRT:   584K  SYS:   248K  EXT:        0K  SYS:    13560K
+         ATB- REAL:                  4116K  SLOTS:                     0K
+              VIRT- ALLOC:      11M SHRD:       0M
+ IEF375I  JOB/KC03C9DS/START 2020115.2310
+ IEF033I  JOB/KC03C9DS/STOP  2020115.2310 
+         CPU:     0 HR  00 MIN  00.00 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+1*** ASSIST 4.0/A2-05/15/82  470/V7A/0:OS/VS2  INS=SDFP7/X=BGHO, CHECK/TRC/=1180, OPTS=CDKMPR FROM PENN ST*NIU COMPSCI*LT         
+0                                                                                                                                 
+0                                                                                                               PAGE    1         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                       1 **************************************************                                       
+                                       2 * ASSIGNMENT 8                                                                           
+                                       3 *                                                                                        
+                                       4 * NAME: ITZEL FERNANDEZ                                                                  
+                                       5 *                                                                                        
+                                       6 * PURPOSE: TO READ IN UNALIGNED DATA AND SORT IT                                         
+                                       7 *                                                                                        
+                                       8 * REGISTER USAGE:                                                                        
+                                       9 *          REG 1,12,13,14,15 -> STORAGE                                                  
+                                      10 *                                                                                        
+                                      11 *                                                                                        
+                                      12 **************************************************                                       
+ 000000                               13 MAIN     CSECT                                                                           
+                                      14 *    <Linking into storage area>                                                         
+ 000000 90EC D00C            0000C    15          STM   14,12,12(13)                                                              
+ 000004 18CF                          16          LR    12,15                                                                     
+ 000000                               17          USING MAIN,12                                                                   
+ 000006 41E0 C06C            0006C    18          LA    14,MAINSAVE                                                               
+ 00000A 50D0 E004            00004    19          ST    13,4(0,14)                                                                
+ 00000E 50E0 D008            00008    20          ST    14,8(0,13)                                                                
+ 000012 18DE                          21          LR    13,14                                                                     
+                                      22 *    <Branching to build>                                                                
+ 000014 4110 C290            00290    23          LA    1,BLIST                                                                   
+ 000018 58F0 C060            00060    24          L     15,=V(BUILD)                                                              
+ 00001C 05EF                          25          BALR  14,15                                                                     
+ 00001E E060 C0C0 0004 000C0          26          XDUMP TABLE                                                                     
+                                      27 *                                                                                        
+ 000024 E020 C1F4 0033 001F4          28          XPRNT MAINHED,51                                                                
+ 00002A E020 C22A 0033 0022A          29          XPRNT HEADERS,51                                                                
+ 000030 E020 C25D 0033 0025D          30          XPRNT BORDERS,51                                                                
+                                      31 *                                                                                        
+                                      32 *    <Branching to print>                                                                
+ 000036 4110 C29C            0029C    33          LA    1,PLIST                                                                   
+ 00003A 58F0 C064            00064    34          L     15,=V(PRINT)                                                              
+ 00003E 05EF                          35          BALR  14,15                                                                     
+                                      36 *                                                                                        
+                                      37 *    <Branching to SortId>                                                               
+ 000040 4110 C2A8            002A8    38          LA    1,SLIST                                                                   
+ 000044 58F0 C068            00068    39          L     15,=V(SORTID)                                                             
+ 000048 05EF                          40          BALR  14,15                                                                     
+                                      41 *    <BRANCHING TO PRINT>                                                                
+ 00004A 4110 C29C            0029C    42          LA    1,PLIST                                                                   
+ 00004E 58F0 C064            00064    43          L     15,=V(PRINT)                                                              
+ 000052 05EF                          44          BALR  14,15                                                                     
+                                      45 *    <EXIT LINKAGE>                                                                      
+ 000054 58D0 D004            00004    46          L     13,4(,13)                                                                 
+ 000058 98EC D00C            0000C    47          LM    14,12,12(13)                                                              
+                                      48 *                                                                                        
+ 00005C 07FE                          49          BR    14                                                                        
+                                      50 *                                                                                        
+                                      51          LTORG                                                                           
+ 000060 000002B8                      52                =V(BUILD)                                                                 
+1                                                                                                               PAGE    2         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000064 000005A0                      53                =V(PRINT)                                                                 
+ 000068 000008F0                      54                =V(SORTID)                                                                
+ 00006C                               55 MAINSAVE DS    18F                                                                       
+ 0000C0                               56          ORG MAIN+((*-MAIN+31)/32)*32                                                    
+ 0000C0                               57 TABLE    DS    20CL15                                                                    
+ 0001EC                               58 EOT      DS    C' '                                                                      
+ 0001F0 00000000                      59 CURRENT  DC    F'0'                                                                      
+ 0001F4 40F1                          60 MAINHED  DC    C' 1'                                                                     
+ 0001F6 4040404040404040              61          DC    CL15' '                                                                   
+ 000205 C99589A389819340              62          DC    C'Initial Table Contents'                                                 
+ 00021B 4040404040404040              63          DC    CL15' '                                                                   
+ 00022A 40                            64 HEADERS  DC    C' '                                                                      
+ 00022B C9C440D5A4948285              65          DC    C'ID Number'                                                              
+ 000234 404040                        66          DC    CL3' '                                                                    
+ 000237 D7C1E2E2E6D6D9C4              67          DC    C'PASSWORD'                                                               
+ 00023F 40404040                      68          DC    CL4' '                                                                    
+ 000243 E6C5C5D2C4C1E8                69          DC    C'WEEKDAY'                                                                
+ 00024A 404040404040                  70          DC    CL6' '                                                                    
+ 000250 E3C9D4C5                      71          DC    C'TIME'                                                                   
+ 000254 4040404040                    72          DC    CL5' '                                                                    
+ 000259 D9D6D6D4                      73          DC    C'ROOM'                                                                   
+ 00025D 40                            74 BORDERS  DC    C' '                                                                      
+ 00025E 6060606060606060              75          DC    C'---------'                                                              
+ 000267 404040                        76          DC    CL3' '                                                                    
+ 00026A 6060606060606060              77          DC    C'--------'                                                               
+ 000272 40404040                      78          DC    CL4' '                                                                    
+ 000276 60606060606060                79          DC    C'-------'                                                                
+ 00027D 404040404040                  80          DC    CL6' '                                                                    
+ 000283 60606060                      81          DC    C'----'                                                                   
+ 000287 4040404040                    82          DC    CL5' '                                                                    
+ 00028C 60606060                      83          DC    C'----'                                                                   
+ 000290 000000C0000001EC              84 BLIST    DC    A(TABLE,EOT,CURRENT)                                                      
+ 00029C 000000C0000001EC              85 PLIST    DC    A(TABLE,EOT,CURRENT)                                                      
+ 0002A8 000000C0000001EC              86 SLIST    DC    A(TABLE,EOT,CURRENT)                                                      
+                                      87 **************************************************                                       
+                                      88 * SUBROUTINE: BUILD                                                                      
+                                      89 *                                                                                        
+                                      90 * PURPOSE: TO BUILD THE TABLE                                                            
+                                      91 *                                                                                        
+                                      92 * REGISTERS USED:                                                                        
+                                      93 *        STORAGE = R1,R12-R15                                                            
+                                      94 *        BINARY  = R5-R7                                                                 
+                                      95 *        TABLE   = R2-R4                                                                 
+                                      96 **************************************************                                       
+ 0002B8                               97 BUILD    CSECT                                                                           
+                                      98 *  <Entry Linkage>                                                                       
+ 0002B8 90EC D00C            0000C    99          STM   14,12,12(13)                                                              
+ 0002BC 18CF                         100          LR    12,15                                                                     
+ 0002B8                              101          USING BUILD,12                                                                  
+ 0002BE 41E0 C18C            00444   102          LA    14,BSAVE                                                                  
+ 0002C2 50D0 E004            00004   103          ST    13,4(0,14)                                                                
+ 0002C6 50E0 D008            00008   104          ST    14,8(0,13)                                                                
+ 0002CA 18DE                         105          LR    13,14                                                                     
+ 0002CC 1B55                         106          SR    5,5                                                                       
+                                     107 *  <Loading Builds parameter list>                                                       
+ 0002CE 9824 1000            00000   108          LM    2,4,0(1)                                                                  
+                                     109 ***** <Read into buffer> ********************                                            
+1                                                                                                               PAGE    3         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                     110 *                                                                                        
+ 0002D2 1B55                         111 LOOP     SR    5,5                                                                       
+ 0002D4 1B66                         112          SR    6,6                                                                       
+ 0002D6 1B77                         113          SR    7,7                                                                       
+ 0002D8 E000 C1D5 0050 0048D         114          XREAD BUFFER,80                                                                 
+ 0002DE 4740 C174            0042C   115          BL    ENDLOOP                                                                   
+                                     116 *                                                                                        
+                                     117 ***** <ID STORAGE> **************************                                            
+                                     118 *    <Take ID out of buffer>                                                             
+ 0002E2 D206 C225 C1D6 004DD 0048E   119          MVC   ID(7),BUFFER+1                                                            
+                                     120 *    <Pack ID into PID>                                                                  
+ 0002E8 F276 C238 C225 004F0 004DD   121          PACK  PID,ID(7)                                                                 
+                                     122 *    <Convert PID to binary and store in 5>                                              
+ 0002EE 4F50 C238            004F0   123          CVB   5,PID                                                                     
+                                     124 *    <Store 5 into table>                                                                
+ 0002F2 BE5F 2000            00000   125          STCM  5,B'1111',0(2)                                                            
+                                     126 *                                                                                        
+                                     127 ***** <Password Storage> ********************                                            
+                                     128 *    <Take password out of buffer>                                                       
+ 0002F6 D207 C248 C1E1 00500 00499   129          MVC   PASS(8),BUFFER+12                                                         
+                                     130 *    <Store password into table>                                                         
+ 0002FC D207 2004 C248 00004 00500   131          MVC   4(8,2),PASS                                                               
+                                     132 *    <Encrypt password>                                                                  
+ 000302 D703 2004 2000 00004 00000   133          XC    4(4,2),0(2)                                                               
+ 000308 D703 2008 2000 00008 00000   134          XC    8(4,2),0(2)                                                               
+                                     135 *                                                                                        
+                                     136 ***** <Days of The Week Storage> ************                                            
+                                     137 *    <Setting up character compare>                                                      
+ 00030E D502 C250 C1ED 00508 004A5   138          CLC   DAY0(3),BUFFER+24                                                         
+ 000314 4780 C09C            00354   139          BC    B'1000',SUN                                                               
+                                     140 *                                                                                        
+ 000318 D502 C256 C1ED 0050E 004A5   141          CLC   DAY1(3),BUFFER+24                                                         
+ 00031E 4780 C0AE            00366   142          BC    B'1000',MON                                                               
+                                     143 *                                                                                        
+ 000322 D502 C25C C1ED 00514 004A5   144          CLC   DAY2(3),BUFFER+24                                                         
+ 000328 4780 C0C0            00378   145          BC    B'1000',TUE                                                               
+                                     146 *                                                                                        
+ 00032C D502 C263 C1ED 0051B 004A5   147          CLC   DAY3(3),BUFFER+24                                                         
+ 000332 4780 C0D2            0038A   148          BC    B'1000',WED                                                               
+                                     149 *                                                                                        
+ 000336 D502 C26C C1ED 00524 004A5   150          CLC   DAY4(3),BUFFER+24                                                         
+ 00033C 4780 C0E4            0039C   151          BC    B'1000',THU                                                               
+                                     152 *                                                                                        
+ 000340 D502 C274 C1ED 0052C 004A5   153          CLC   DAY5(3),BUFFER+24                                                         
+ 000346 4780 C0F6            003AE   154          BC    B'1000',FRI                                                               
+                                     155 *                                                                                        
+ 00034A D502 C27A C1ED 00532 004A5   156          CLC   DAY6(3),BUFFER+24                                                         
+ 000350 4780 C108            003C0   157          BC    B'1000',SAT                                                               
+                                     158 *    <Adding day of week to table>                                                       
+ 000354 F270 C2A0 C184 00558 0043C   159 SUN      PACK  CON0(8),=CL1'0'                                                           
+ 00035A 4F60 C2A0            00558   160          CVB   6,CON0                                                                    
+ 00035E 8960 0015            00015   161          SLL   6,21                                                                      
+ 000362 47F0 C11A            003D2   162          B     TIME                                                                      
+ 000366 F270 C2A8 C185 00560 0043D   163 MON      PACK  CON1(8),=CL1'1'                                                           
+ 00036C 4F60 C2A8            00560   164          CVB   6,CON1                                                                    
+ 000370 8960 0015            00015   165          SLL   6,21                                                                      
+ 000374 47F0 C11A            003D2   166          B     TIME                                                                      
+1                                                                                                               PAGE    4         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000378 F270 C2B0 C186 00568 0043E   167 TUE      PACK  CON2(8),=CL1'2'                                                           
+ 00037E 4F60 C2B0            00568   168          CVB   6,CON2                                                                    
+ 000382 8960 0015            00015   169          SLL   6,21                                                                      
+ 000386 47F0 C11A            003D2   170          B     TIME                                                                      
+ 00038A F270 C2B8 C187 00570 0043F   171 WED      PACK  CON3(8),=CL1'3'                                                           
+ 000390 4F60 C2B8            00570   172          CVB   6,CON3                                                                    
+ 000394 8960 0015            00015   173          SLL   6,21                                                                      
+ 000398 47F0 C11A            003D2   174          B     TIME                                                                      
+ 00039C F270 C2C0 C187 00578 0043F   175 THU      PACK  CON4(8),=CL1'3'                                                           
+ 0003A2 4F60 C2C0            00578   176          CVB   6,CON4                                                                    
+ 0003A6 8960 0015            00015   177          SLL   6,21                                                                      
+ 0003AA 47F0 C11A            003D2   178          B     TIME                                                                      
+ 0003AE F270 C2C8 C188 00580 00440   179 FRI      PACK  CON5(8),=CL1'4'                                                           
+ 0003B4 4F60 C2C8            00580   180          CVB   6,CON5                                                                    
+ 0003B8 8960 0015            00015   181          SLL   6,21                                                                      
+ 0003BC 47F0 C11A            003D2   182          B     TIME                                                                      
+ 0003C0 F270 C2D0 C189 00588 00441   183 SAT      PACK  CON6(8),=CL1'5'                                                           
+ 0003C6 4F60 C2D0            00588   184          CVB   6,CON6                                                                    
+ 0003CA 8960 0015            00015   185          SLL   6,21                                                                      
+ 0003CE 47F0 C11A            003D2   186          B     TIME                                                                      
+                                     187 *                                                                                        
+                                     188 ***** <Time Storage> ************************                                            
+                                     189 *                                                                                        
+ 0003D2 1B77                         190 TIME     SR    7,7                                                                       
+                                     191 **   <Hour Storage>                                                                      
+                                     192 *    <Take Hour our of buffer>                                                           
+ 0003D4 D201 C282 C1FA 0053A 004B2   193          MVC   HOUR(2),BUFFER+37                                                         
+                                     194 *    <Pack hour into PHour>                                                              
+ 0003DA F271 C298 C282 00550 0053A   195          PACK  PHOUR(8),HOUR                                                             
+                                     196 *    <Convert PHOUR to binary, store in 7>                                               
+ 0003E0 4F70 C298            00550   197          CVB   7,PHOUR                                                                   
+                                     198 *    <Store 5 into table>                                                                
+ 0003E4 8970 0010            00010   199          SLL   7,16                                                                      
+ 0003E8 1767                         200          XR    6,7                                                                       
+ 0003EA 1B77                         201          SR    7,7                                                                       
+                                     202 **   <Minute Storage>                                                                    
+                                     203 *    <Take min out of buffer>                                                            
+ 0003EC D201 C284 C1FD 0053C 004B5   204          MVC   MIN(2),BUFFER+40                                                          
+                                     205 *    <Pack min into PMin>                                                                
+ 0003F2 F271 C290 C284 00548 0053C   206          PACK  PMIN,MIN                                                                  
+                                     207 *    <Convert PMIN to binary, store in 7>                                                
+ 0003F8 4F70 C290            00548   208          CVB   7,PMIN                                                                    
+                                     209 *    <Shift 7 by 20 bits>                                                                
+ 0003FC 8970 000A            0000A   210          SLL   7,10                                                                      
+                                     211 *    <Store into register 6>                                                             
+ 000400 1767                         212          XR    6,7                                                                       
+                                     213 *                                                                                        
+                                     214 ***** <Room number storage area> ************                                            
+                                     215 *                                                                                        
+ 000402 1B77                         216          SR    7,7                                                                       
+                                     217 *    <Take room number out of buffer>                                                    
+ 000404 D202 C2D8 C203 00590 004BB   218          MVC   NUM(3),BUFFER+46                                                          
+                                     219 *    <Pack NUM into PNUM>                                                                
+ 00040A F272 C2E0 C2D8 00598 00590   220          PACK  PNUM,NUM                                                                  
+                                     221 *    <Convert PNUM to binary and store in 7>                                             
+ 000410 4F70 C290            00548   222          CVB   7,PMIN                                                                    
+                                     223 *    <Store into register 6>                                                             
+1                                                                                                               PAGE    5         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000414 1767                         224          XR    6,7                                                                       
+                                     225 *                                                                                        
+                                     226 ***** <Add all to table> ********************                                            
+                                     227 *                                                                                        
+ 000416 BE67 200C            0000C   228          STCM  6,B'0111',12(2)                                                           
+                                     229 *        XDUMP 0(2)                                                                      
+ 00041A 5A40 C180            00438   230          A     4,=F'1'                                                                   
+ 00041E 4122 000F            0000F   231          LA    2,15(2)                                                                   
+ 000422 1923                         232          CR    2,3                                                                       
+ 000424 4780 C174            0042C   233          BC    B'1000',ENDLOOP                                                           
+ 000428 47F0 C01A            002D2   234          B     LOOP                                                                      
+                                     235 *                                                                                        
+                                     236 ***** <Exit linkage> ************************                                            
+ 00042C 58D0 D004            00004   237 ENDLOOP  L     13,4(0,13)                                                                
+ 000430 98EC D00C            0000C   238          LM    14,12,12(13)                                                              
+ 000434 07FE                         239          BR    14                                                                        
+                                     240 *                                                                                        
+                                     241          LTORG                                                                           
+ 000438 00000001                     242                =F'1'                                                                     
+ 00043C F0                           243                =CL1'0'                                                                   
+ 00043D F1                           244                =CL1'1'                                                                   
+ 00043E F2                           245                =CL1'2'                                                                   
+ 00043F F3                           246                =CL1'3'                                                                   
+ 000440 F4                           247                =CL1'4'                                                                   
+ 000441 F5                           248                =CL1'5'                                                                   
+ 000444                              249 BSAVE    DS    18F                                                                       
+ 00048C 40                           250 CRG      DC    C' '                                                                      
+ 00048D                              251 BUFFER   DS    CL80                                                                      
+ 0004DD                              252 ID       DS    CL7                                                                       
+ 0004E8                              253 FILLER1  DS    D                                                                         
+ 0004F0                              254 PID      DS    PL8                                                                       
+ 0004F8                              255 PIDOUT   DS    CL8                                                                       
+ 000500                              256 PASS     DS    CL8                                                                       
+ 000508 E2A4958481A8                 257 DAY0     DC    C'Sunday'                                                                 
+ 00050E D496958481A8                 258 DAY1     DC    C'Monday'                                                                 
+ 000514 E3A485A28481A8               259 DAY2     DC    C'Tuesday'                                                                
+ 00051B E685849585A28481             260 DAY3     DC    C'Wednesday'                                                              
+ 000524 E388A499A28481A8             261 DAY4     DC    C'Thursday'                                                               
+ 00052C C699898481A8                 262 DAY5     DC    C'Friday'                                                                 
+ 000532 E281A3A4998481A8             263 DAY6     DC    C'Saturday'                                                               
+ 00053A                              264 HOUR     DS    CL2                                                                       
+ 00053C                              265 MIN      DS    CL2                                                                       
+ 000540                              266 FILLER2  DS    D                                                                         
+ 000548                              267 PMIN     DS    PL8                                                                       
+ 000550                              268 PHOUR    DS    D                                                                         
+ 000558                              269 CON0     DS    D                                                                         
+ 000560                              270 CON1     DS    D                                                                         
+ 000568                              271 CON2     DS    D                                                                         
+ 000570                              272 CON3     DS    D                                                                         
+ 000578                              273 CON4     DS    D                                                                         
+ 000580                              274 CON5     DS    D                                                                         
+ 000588                              275 CON6     DS    D                                                                         
+ 000590                              276 NUM      DS    CL3                                                                       
+ 000593                              277 SMALL    DS    CL3                                                                       
+ 000598                              278 PNUM     DS    D                                                                         
+                                     279 **************************************************                                       
+                                     280 * SUBROUTINE: PRINT                                                                      
+1                                                                                                               PAGE    6         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                     281 *                                                                                        
+                                     282 * PURPOSE: TO PRINT THE TABLE IN A PROPER FORMAT                                         
+                                     283 *                                                                                        
+                                     284 * REGISTERS USED:                                                                        
+                                     285 *        STORAGE = R1,R12-R15                                                            
+                                     286 *     CVD/MVC/ED = R5-R7                                                                 
+                                     287 *          TABLE = R2-R4                                                                 
+                                     288 *                                                                                        
+                                     289 *************************************************                                        
+ 0005A0                              290 PRINT    CSECT                                                                           
+                                     291 *  <Entry Linkage>                                                                       
+ 0005A0 90EC D00C            0000C   292          STM   14,12,12(13)                                                              
+ 0005A4 18CF                         293          LR    12,15                                                                     
+ 0005A0                              294          USING PRINT,12                                                                  
+ 0005A6 41E0 C19C            0073C   295          LA    14,PSAVE                                                                  
+ 0005AA 50D0 E004            00004   296          ST    13,4(0,14)                                                                
+ 0005AE 50E0 D008            00008   297          ST    14,8(0,13)                                                                
+ 0005B2 18DE                         298          LR    13,14                                                                     
+ 0005B4 1B88                         299          SR    8,8                                                                       
+ 0005B6 9824 1000            00000   300          LM    2,4,0(1)                                                                  
+                                     301 ***** <Print the table> *********************                                            
+                                     302 *  <begin loop>                                                                          
+ 0005BA 5A80 C170            00710   303 LOOP2    A     8,=F'1'                                                                   
+ 0005BE 5980 C174            00714   304          C     8,=F'17'                                                                  
+ 0005C2 4780 C162            00702   305          BC    B'1000',ENDLOOP2                                                          
+ 0005C6 1B55                         306          SR    5,5                                                                       
+ 0005C8 BF5F 2000            00000   307          ICM   5,B'1111',0(2)                                                            
+ 0005CC 4E50 C238            007D8   308          CVD   5,PIDNUM                                                                  
+                                     309 *                                                                                        
+                                     310 ***** <Grab ID from table> ******************                                            
+                                     311 *                                                                                        
+ 0005D0 D207 C291 C178 00831 00718   312          MVC   IDNUM(8),=X'40212020202020202020'                                         
+ 0005D6 DE07 C291 C23C 00831 007DC   313          ED    IDNUM(8),PIDNUM+4                                                         
+ 0005DC D207 C241 C291 007E1 00831   314          MVC   PLINE(8),IDNUM                                                            
+                                     315 *                                                                                        
+                                     316 ***** <decrypt password> ********************                                            
+                                     317 *                                                                                        
+ 0005E2 D703 2004 2000 00004 00000   318          XC    4(4,2),0(2)                                                               
+ 0005E8 D703 2008 2000 00008 00000   319          XC    8(4,2),0(2)                                                               
+ 0005EE D207 C24D 2004 007ED 00004   320          MVC   PLINE+12(8),4(2)                                                          
+                                     321 *                                                                                        
+                                     322 *  <Move the three of Table onto register 6>                                             
+ 0005F4 1B66                         323          SR    6,6                                                                       
+ 0005F6 BF67 200C            0000C   324          ICM   6,B'0111',12(2)                                                           
+                                     325 *  <Shift to grab the day>                                                               
+ 0005FA 8860 0015            00015   326          SRL   6,21                                                                      
+ 0005FE 4960 C182            00722   327          CH    6,=H'0'                                                                   
+                                     328 *                                                                                        
+ 000602 4780 C11C            006BC   329          BC    B'1000',RVT0                                                              
+ 000606 4960 C184            00724   330          CH    6,=H'1'                                                                   
+ 00060A 4780 C126            006C6   331          BC    B'1000',RVT1                                                              
+ 00060E 4960 C186            00726   332          CH    6,=H'2'                                                                   
+ 000612 4780 C130            006D0   333          BC    B'1000',RVT2                                                              
+ 000616 4960 C188            00728   334          CH    6,=H'3'                                                                   
+ 00061A 4780 C13A            006DA   335          BC    B'1000',RVT3                                                              
+ 00061E 4960 C18A            0072A   336          CH    6,=H'4'                                                                   
+ 000622 4780 C144            006E4   337          BC    B'1000',RVT4                                                              
+1                                                                                                               PAGE    7         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000626 4960 C18C            0072C   338          CH    6,=H'5'                                                                   
+ 00062A 4780 C14E            006EE   339          BC    B'1000',RVT5                                                              
+ 00062E 4960 C18E            0072E   340          CH    6,=H'6'                                                                   
+ 000632 4780 C158            006F8   341          BC    B'1000',RVT6                                                              
+                                     342 *  <Shift to grab the hour>                                                              
+ 000636 1B66                         343 MYLINE   SR    6,6                                                                       
+ 000638 BF6F 200C            0000C   344          ICM   6,B'1111',12(2)                                                           
+ 00063C 8960 0003            00003   345          SLL   6,3                                                                       
+ 000640 8860 001B            0001B   346          SRL   6,27                                                                      
+ 000644 4E60 C318            008B8   347          CVD   6,MYPHOUR                                                                 
+ 000648 D207 C320 C190 008C0 00730   348          MVC   MYHOUR(8),=X'40202020202020202020'                                        
+ 00064E DE07 C320 C31E 008C0 008BE   349          ED    MYHOUR(8),MYPHOUR+6                                                       
+ 000654 D207 C264 C320 00804 008C0   350          MVC   PLINE+35(8),MYHOUR                                                        
+ 00065A D202 C268 C348 00808 008E8   351          MVC   PLINE+39(3),COLON                                                         
+                                     352 *                                                                                        
+ 000660 1B66                         353          SR    6,6                                                                       
+ 000662 BF6F 200C            0000C   354          ICM   6,B'1111',12(2)                                                           
+ 000666 8960 0008            00008   355          SLL   6,8                                                                       
+ 00066A 8860 001A            0001A   356          SRL   6,26                                                                      
+ 00066E 4E60 C328            008C8   357          CVD   6,MYPMIN                                                                  
+ 000672 D207 C330 C178 008D0 00718   358          MVC   MYMIN(8),=X'40212020202020202020'                                         
+ 000678 DE07 C330 C32E 008D0 008CE   359          ED    MYMIN(8),MYPMIN+6                                                         
+ 00067E D207 C269 C332 00809 008D2   360          MVC   PLINE+40(8),MYMIN+2                                                       
+ 000684 D207 C26B C34B 0080B 008EB   361          MVC   PLINE+42(8),SPACEOUT                                                      
+                                     362 *                                                                                        
+ 00068A 1B66                         363          SR    6,6                                                                       
+ 00068C BF6F 200C            0000C   364          ICM   6,B'1111',12(2)                                                           
+ 000690 8960 000E            0000E   365          SLL   6,14                                                                      
+ 000694 8860 0016            00016   366          SRL   6,22                                                                      
+ 000698 4E60 C338            008D8   367          CVD   6,MYPROOM                                                                 
+ 00069C D207 C340 C178 008E0 00718   368          MVC   MYROOM(8),=X'40212020202020202020'                                        
+ 0006A2 DE07 C340 C33E 008E0 008DE   369          ED    MYROOM(8),MYPROOM+6                                                       
+ 0006A8 D207 C26D C340 0080D 008E0   370          MVC   PLINE+44(8),MYROOM                                                        
+                                     371 *                                                                                        
+ 0006AE E020 C240 0051 007E0         372          XPRNT CBG,81                                                                    
+ 0006B4 4120 200F            0000F   373          LA    2,15(0,2)                                                                 
+ 0006B8 47F0 C01A            005BA   374          B     LOOP2                                                                     
+                                     375 ***** <Branches to fill in the day> *********                                            
+                                     376 *                                                                                        
+                                     377 *                                                                                        
+ 0006BC D209 C259 C2A9 007F9 00849   378 RVT0     MVC   PLINE+24(10),SUND                                                         
+ 0006C2 47F0 C096            00636   379          B     MYLINE                                                                    
+                                     380 *                                                                                        
+ 0006C6 D209 C259 C2B8 007F9 00858   381 RVT1     MVC   PLINE+24(10),MOND                                                         
+ 0006CC 47F0 C096            00636   382          B     MYLINE                                                                    
+                                     383 *                                                                                        
+ 0006D0 D209 C259 C2C7 007F9 00867   384 RVT2     MVC   PLINE+24(10),TUES                                                         
+ 0006D6 47F0 C096            00636   385          B     MYLINE                                                                    
+                                     386 *                                                                                        
+ 0006DA D209 C259 C2D6 007F9 00876   387 RVT3     MVC   PLINE+24(10),WEDN                                                         
+ 0006E0 47F0 C096            00636   388          B     MYLINE                                                                    
+                                     389 *                                                                                        
+ 0006E4 D209 C259 C2E5 007F9 00885   390 RVT4     MVC   PLINE+24(10),THUR                                                         
+ 0006EA 47F0 C096            00636   391          B     MYLINE                                                                    
+                                     392 *                                                                                        
+ 0006EE D209 C259 C2F4 007F9 00894   393 RVT5     MVC   PLINE+24(10),FRID                                                         
+ 0006F4 47F0 C096            00636   394          B     MYLINE                                                                    
+1                                                                                                               PAGE    8         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                     395 *                                                                                        
+ 0006F8 D209 C259 C303 007F9 008A3   396 RVT6     MVC   PLINE+24(10),SATU                                                         
+ 0006FE 47F0 C096            00636   397          B     MYLINE                                                                    
+ 000702 58D0 D004            00004   398 ENDLOOP2 L     13,4(,13)                                                                 
+ 000706 98EC D00C            0000C   399          LM    14,12,12(13)                                                              
+ 00070A 07FE                         400          BR    14                                                                        
+                                     401 *                                                                                        
+                                     402          LTORG                                                                           
+ 000710 00000001                     403                =F'1'                                                                     
+ 000714 00000011                     404                =F'17'                                                                    
+ 000718 4021202020202020             405                =X'40212020202020202020'                                                  
+ 000722 0000                         406                =H'0'                                                                     
+ 000724 0001                         407                =H'1'                                                                     
+ 000726 0002                         408                =H'2'                                                                     
+ 000728 0003                         409                =H'3'                                                                     
+ 00072A 0004                         410                =H'4'                                                                     
+ 00072C 0005                         411                =H'5'                                                                     
+ 00072E 0006                         412                =H'6'                                                                     
+ 000730 4020202020202020             413                =X'40202020202020202020'                                                  
+ 00073C                              414 PSAVE    DS    18F                                                                       
+ 000784                              415 BUFFER2  DS    CL80                                                                      
+ 0007D8                              416 PIDNUM   DS    D                                                                         
+ 0007E0 40                           417 CBG      DC    C' '                                                                      
+ 0007E1 4040404040404040             418 PLINE    DC    CL80' '                                                                   
+ 000831                              419 IDNUM    DS    CL7                                                                       
+ 000838                              420 PW       DS    D                                                                         
+ 000840                              421 PDW      DS    D                                                                         
+ 000848                              422 DW       DS    CL1                                                                       
+ 000849 E2A4958481A84040             423 SUND     DC    C'Sunday         '                                                        
+ 000858 D496958481A84040             424 MOND     DC    C'Monday         '                                                        
+ 000867 E3A485A28481A840             425 TUES     DC    C'Tuesday        '                                                        
+ 000876 E685849585A28481             426 WEDN     DC    C'Wednesday      '                                                        
+ 000885 E388A499A28481A8             427 THUR     DC    C'Thursday       '                                                        
+ 000894 C699898481A84040             428 FRID     DC    C'Friday         '                                                        
+ 0008A3 E281A3A4998481A8             429 SATU     DC    C'Saturday       '                                                        
+ 0008B8                              430 MYPHOUR  DS    D                                                                         
+ 0008C0                              431 MYHOUR   DS    CL8                                                                       
+ 0008C8                              432 MYPMIN   DS    D                                                                         
+ 0008D0                              433 MYMIN    DS    CL8                                                                       
+ 0008D8                              434 MYPROOM  DS    D                                                                         
+ 0008E0                              435 MYROOM   DS    CL8                                                                       
+ 0008E8 7A4040                       436 COLON    DC    C':  '                                                                    
+ 0008EB 4040404040                   437 SPACEOUT DC    C'     '                                                                  
+                                     438 ***********************************************                                          
+                                     439 *   SORT THE TABLE BY ID NUMBER                                                                                      
+                                     440 *                                                                                        
+                                     441 *   R12 BASE                                                                                     
+                                     442 *   R2  TABLE                                                                                     
+                                     443 *   R3  EOT                                                                                   
+                                     444 *                                                                                     
+                                     445 *                                                                                        
+                                     446 *                                                                                        
+                                     447 *                                                                                        
+                                     448 ***********************************************                                          
+ 0008F0                              449 SORTID   CSECT                                                                           
+ 0008F0 90EC D00C            0000C   450          STM   14,12,12(13)                                                              
+ 0008F4 18CF                         451          LR    12,15                                                                     
+1                                                                                                               PAGE    9         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 0008F0                              452          USING SORTID,12                                                                 
+ 0008F6 41E0 C06C            0095C   453          LA    14,SAVED                                                                  
+ 0008FA 50D0 E004            00004   454          ST    13,4(,14)                                                                 
+ 0008FE 50E0 D008            00008   455          ST    14,8(,13)                                                                 
+ 000902 18DE                         456          LR    13,14                                                                     
+ 000904 9823 1000            00000   457          LM    2,3,0(1)                                                                  
+                                     458 ***ENTRY LINKAGE****************                                                         
+ 000908 5800 3000            00000   459          L     0,0(,3)                                                                   
+ 00090C 5B30 C068            00958   460          S     3,=F'15'                                                                  
+ 000910 1842                         461          LR    4,2                                                                       
+ 000912 1923                         462 SLOOP    CR    2,3                                                                       
+ 000914 47A0 C05E            0094E   463          BC    B'1010',SEND                                                              
+ 000918 1842                         464          LR    4,2                                                                       
+ 00091A 1943                         465 SLOOP2   CR    4,3                                                                       
+ 00091C 47A0 C056            00946   466          BC    B'1010',SEND1                                                             
+ 000920 1854                         467          LR    5,4                                                                       
+ 000922 4140 400F            0000F   468          LA    4,15(,4)                                                                  
+ 000926 D503 4000 5000 00000 00000   469 S        CLC   0(4,4),0(5)                                                               
+ 00092C 47A0 C052            00942   470          BC    B'1010',ENDS                                                              
+ 000930 D20E C0B4 4000 009A4 00000   471          MVC   STEMP(15),0(4)                                                            
+ 000936 D20E 4000 5000 00000 00000   472          MVC   0(15,4),0(5)                                                              
+ 00093C D20E 5000 C0B4 00000 009A4   473          MVC   0(15,5),STEMP                                                             
+ 000942 47F0 C02A            0091A   474 ENDS     B     SLOOP2                                                                    
+ 000946 5B30 C068            00958   475 SEND1    S     3,=F'15'                                                                  
+ 00094A 47F0 C022            00912   476          B     SLOOP                                                                     
+                                     477 ***EXIT LINKAGE*****************                                                         
+ 00094E                              478 SEND     DS    0H                                                                        
+ 00094E 58D0 D004            00004   479          L     13,4(,13)                                                                 
+ 000952 98EC D00C            0000C   480          LM    14,12,12(13)                                                              
+ 000956 07FE                         481          BR    14                    End of subroutine                                   
+                                     482          LTORG                       Literals are put here                               
+ 000958 0000000F                     483                =F'15'                                                                    
+ 00095C                              484 SAVED    DS    18F'0'                                                                    
+ 0009A4                              485 STEMP    DS    15C                                                                       
+                                     486          END   MAIN                                                                      
+0***  NO   STATEMENTS FLAGGED -  NO   WARNINGS,  NO   ERRORS                                                                      
+0*** DYNAMIC CORE AREA USED:  LOW:   17160 HIGH:    2616 LEAVING:  473792 FREE BYTES. AVERAGE:       40 BYTES/STMT ***            
+0*** ASSEMBLY TIME =    0.001 SECS,   487000 STATEMENTS/SEC ***                                                                   
+0*** PROGRAM EXECUTION BEGINNING - ANY OUTPUT BEFORE EXECUTION TIME MESSAGE IS PRODUCED BY USER PROGRAM ***                       
+0BEGIN XSNAP - CALL     1 AT D0000024 USER STORAGE                                                                                
+0                             CORE ADDRESSES SPECIFIED-     0000C0 TO 0000C4                                                      
+ 0000C0   00000100 E2C9D5D7 D3C5D6E6 0C000000    60A824F1 925BD0F5 965FDC4A 781E008B   *....SINPLEOW.......1...5........*                                                                                             
+ 000100   EB3CF17A 1ACDF17A 1ACDA902 A800168E    D6D7D76C 34E6C057 12CB3C77 006A3D20   *..1...1.........OPP..W..........*         
+0                                                                                                                                 
+                                                                                                                                  
+0                                                                                                                                 
+ 1               Initial Table Contents                                                                                           
+ ID Number   PASSWORD    WEEKDAY      TIME   ROOM                                                                               
+ ---------   --------    -------      ----   ----                                                                                
+0 0000256   SIMPLEPW    Sunday      12:00    064                                                                                 
+0 6334500   12345678    Tuesday     10:30    119                                                                                 
+0 9169724   11111111    Friday      09:00    680                                                                                 
+0 1478358   PASSWORD    Saturday    11:15    119                                                                                 
+0 6962464   DROWSSAP    Thursday    08:30    356                                                                                 
+0 5705145   DONTCARE    Monday      19:45    242                                                                                 
+0 3281827   QWERTYUV    Friday      14:20    680                                                                                 
+0 9961491   ASDFGHJK    Tuesday     14:00    119                                                                                 
+0 2995942   MYSTUFF     Tuesday     18:15    242                                                                                 
+0 4827436   ZZZZZZZZ    Thursday    10:30    242                                                                                 
+0 2391604   IMBORED     Saturday    14:45    680                                                                                 
+0 8723741   WHATFUNN    Wednesday   13:00    356                                                                                 
+0 7529778   IAMSILLY    Wednesday   14:45    119                                                                                 
+1 4771538   O0I1L5S     Monday      15:30    680                                                                                 
+0 5667299   2ZMN8SQ0    Thursday    16:00    242                                                                                 
+0 0041467   LETMEIN     Monday      11:00    242                                                                                 
+                                                                                                                                  
+0                Table Sorted by ID                                                                                               
+ ID Number   PASSWORD    WEEKDAY      TIME   ROOM                                                                               
+ ---------   --------    -------      ----   ----                                                                                 
+0 0000256   SIMPLEPW    Sunday      12:00    064                                                                                 
+0 0041467   LETMEIN     Monday      11:00    242                                                                                 
+0 1478358   PASSWORD    Saturday    11:15    119                                                                                 
+0 2391604   IMBORED     Saturday    14:45    680                                                                                 
+0 2995942   MYSTUFF     Tuesday     18:15    242                                                                                 
+0 3281827   QWERTYUV    Friday      14:20    680                                                                                 
+0 4771538   O0I1L5S     Monday      15:30    680                                                                                 
+0 4827436   ZZZZZZZZ    Thursday    10:30    242                                                                                 
+0 5667299   2ZMN8SQ0    Thursday    16:00    242                                                                                 
+0 5705145   DONTCARE    Monday      19:45    242                                                                                 
+0 6334500   12345678    Tuesday     10:30    119                                                                                 
+0 6962464   DROWSSAP    Thursday    08:30    356                                                                                 
+0 7529778   IAMSILLY    Wednesday   14:45    119                                                                                 
+0 8723741   WHATFUNN    Wednesday   13:00    356                                                                                 
+0 9169724   11111111    Friday      09:00    680                                                                                 
+0 9961491   ASDFGHJK    Tuesday     14:00    119                                                                  
+0*** EXECUTION TIME =    0.001 SECS.      4309 INSTRUCTIONS EXECUTED -  4309000 INSTRUCTIONS/SEC ***                              
+0*** AM004 - NORMAL USER TERMINATION BY RETURN ***                                                                                

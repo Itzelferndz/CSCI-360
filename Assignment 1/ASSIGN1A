@@ -1,0 +1,24 @@
+//KC03C9DS JOB ,'ITZEL FERNANDEZ',MSGCLASS=H                            00010000
+//STEP1 EXEC PGM=ASSIST                                                 00020000
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                        00030000
+//SYSPRINT DD SYSOUT=*                                                  00040000
+//SYSIN DD *                                                            00050000
+*******************************************************                 00060000
+MAIN     CSECT                                                          00070000
+         USING MAIN,15                                                  00080000
+         L     1,FIRST                                                  00081000
+         L     2,SECOND                                                 00082000
+         AR    1,2                                                      00083000
+         LR    3,1                                                      00083100
+         L     5,FIRST                                                  00084000
+         L     6,SECOND                                                 00085000
+         SR    5,6                                                      00086000
+         LR    4,5                                                      00087001
+         XDUMP FIRST,8                                                  00088003
+         XDUMP SECOND,8                                                 00088103
+         BR    14                                                       00089002
+FIRST    DC    F'219'                                                   00090000
+SECOND   DC    F'83'                                                    00100000
+         END   MAIN                                                     00101002
+/*                                                                      00110000
+//                                                                      00120000

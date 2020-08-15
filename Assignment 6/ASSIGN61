@@ -1,0 +1,388 @@
+ENTRY   DSECT     Format for Table
+FNAME   DS    10C
+LNAME   DS    10C
+ID      DS    8C
+BAL     DS    PL4 32 chars
+***********************************
+CHANGE   DSECT    Format for transactions
+CID      DS    8C
+         DS    2C
+CTYPE    DS    1C
+         DS    2C
+CAMOUNT  DS    7C
+         DS    2C
+CDAY     DS    2C
+CMONTH   DS    2C
+CYEAR    DS    4C
+***********************************
+*
+*  Register usage:
+*  15   MAIN
+*  14   Exit
+*  1    Params
+***********************************
+MAIN     CSECT
+         USING MAIN,15
+         ST    14,EXIT      Location
+         LA    13,SAVEM
+         ZAP   PCOUNT(2),=PL1'0'
+         LA    1,TABLE
+         ST    1,PARMS
+         LA    1,EOT
+         ST    1,PARMS+4
+         LA    1,BUFF
+         ST    1,PARMS+8
+         LA    1,PCOUNT
+         ST    1,PARMS+12
+         LA    1,PARMS
+         L     10,=V(BUILD)
+         BALR  14,10        Build
+         LA     1,PARMS
+         L     10,=V(PRINT)
+         BALR  14,10        Print
+         LA     1,PARMS
+         L     10,=V(TRANS)
+         BALR  14,10        Trans
+         LA     1,PARMS
+         L     10,=V(PRINT)
+         BALR  14,10        Print
+*
+         L     14,EXIT      Location
+         BR    14           End program
+         LTORG
+         ORG   MAIN+((*-MAIN+31)/32)*32
+TABLE    DS    40CL38
+EOT      DS    F
+BUFF     DS    84C
+PCOUNT   DS    PL2'0'
+PARMS    DS    4F'0'
+SAVEM    DS    18F'0'
+EXIT     DS    F
+***********************************
+*
+*  Register usage:
+*   15
+*   14    Exit
+*   13    Save Area
+*   1     Buffer
+*   2     TABLE
+*   3     ENTRY
+*   4     Buffer
+***********************************
+BUILD    CSECT
+         STM   14,12,12(13)
+         LR    12,15
+         USING BUILD,10
+         USING ENTRY,2   ENTRY
+         LA    14,SAVEB
+         ST    13,4(,14)
+         ST    14,8(,13)
+         LR    13,14
+*
+         LM    2,4,0(1)
+READ     XREAD 0(,4),84 read
+         BL    REND
+         LA    1,0(,4)
+         MVC   FNAME(10),0(1)
+         CLC   FNAME(8),=CL8'DONOTPUT' check if end
+         BE    REND
+         LA    1,12(,1)
+         MVC   LNAME(10),0(1)
+         LA    1,12(,1)
+         MVC   ID(8),0(1)
+         LA    1,10(,1)
+         MVC   TEMP(7),0(1)  Save the balance
+         PACK  BAL(4),TEMP(7) Pack the balance
+         CLC   7(1,1),=CL1'+' check if positive
+         BE    SKIP
+         MP    BAL(4),=PL1'-1'  if negitive
+SKIP     DS    0H
+         LA    2,32(,2)
+         B     READ    top of loop
+REND     DS    0H
+         ST    2,0(,3)
+*
+         L     13,4(,13)
+         LM    14,12,12(13)
+         BR    14           subroutine
+         LTORG
+         DC    C'*'
+TEMP     DS    CL7' '
+SAVEB    DS    18F'0'
+***********************************
+*
+*  Register usage:
+*   15
+*   14    Exit
+*   13    Save Area
+*   1
+*   2     TABLE
+*   3     ENTRY
+*   4     Buffer
+*   5     Page
+*   6     counter
+***********************************
+PRINT    CSECT
+         STM   14,12,12(13)
+         LR    12,15
+         USING PRINT,10
+         LM    2,5,0(1)     Load params
+         LA    14,SAVEC
+         ST    13,4(,14)
+         ST    14,8(,13)
+         LR    13,14
+*
+         USING ENTRY,2      Use ENTRY
+         SR    6,6          Clear
+PLOOP    DS    0H
+         C     2,0(,3)      Check if end of Table
+         BE    PEND         Branch to end
+         C     6,=F'0'
+         BNE   PSKIP
+         AP    0(2,5),=PL1'1'
+         MVC   PPNUM(4),=X'40202120'
+         ED    PPNUM(4),0(5)
+         XPRNT PHEAD,81
+         XPRNT PHEADA,76
+         L     6,=F'5'
+PSKIP    DS    0H
+         MVC   PFNAME(10),FNAME
+         MVC   PLNAME(10),LNAME
+         MVC   PID(8),ID    Set ID
+         MVC   PBAL(10),=X'4020206B2021204B2020'
+         LA    1,PBAL+6
+         EDMK  PBAL(10),BAL
+         BCTR  1,0
+         MVC   0(1,1),=CL1'$'
+         MVC   PT(2),=CL2'  '
+         AP    BAL,=PL1'0'
+         BH    PPRINT
+         MVC   PT(2),=CL2'CR' If negitive set CR
+PPRINT   XPRNT PLINE,78
+         AP    PNUM(2),=PL1'1'
+         AP    PSUM(4),BAL
+         LA    2,32(0,2) move pointer
+         S     6,=F'1' subtract one
+         B     PLOOP   top of loop
+PEND     DS    0H
+         MVC   PPENDC(4),=X'40202020'
+         ED    PPENDC(4),PNUM
+         XPRNT PPEND,33
+         LA    1,PSENDS+6
+         MVC   PSENDS(10),=X'4020206B2021204B2020'
+         EDMK  PSENDS(10),PSUM
+         BCTR  1,0
+         MVC   0(1,1),=CL1'$'
+         XPRNT PSEND,35 Print the Sum
+         ZAP   PNTEMP(5),PSUM(4)
+         DP    PNTEMP(5),PNUM(2)
+         LA    1,PFENDT+6
+         MVC   PFENDT(7),=X'402021204B2020'
+         EDMK  PFENDT(7),PNTEMP
+         BCTR  1,0
+         MVC   0(1,1),=CL1'$' Add $
+         XPRNT PFEND,35 Print average
+         ZAP   PNUM(2),=PL1'0'
+         ZAP   PSUM(4),=PL1'0'
+*
+         L     13,4(,13)
+         LM    14,12,12(13)
+         BR    14           End
+         LTORG
+PHEAD    DC    CL50'1                      Odds and Ends Customer Data'
+         DC    CL27'                      Page'
+PPNUM    DS    CL4' '
+PHEADA   DC    CL44'-First Name           Last Name             '
+         DC    CL32'ID Number                Balance'
+PLINE    DC    CL1'0'
+PFNAME   DS    10C' '
+         DC    11C' '
+PLNAME   DS    10C' '
+         DC    11C' '
+PID      DS    8C' '
+         DC    14C' '
+PBAL     DS    10C' '
+         DC    1C' '
+PT       DS    2C' '
+PPEND    DC    CL29'-Number of customers =      '
+PPENDC   DS    4C' '
+PSEND    DC    CL25'0Sum of all balances =   '
+PSENDS   DS    10C' '
+PFEND    DC    CL28'0Average balance =          '
+PFENDT   DS    7C' '
+PNUM     DC    PL2'0'
+PNTEMP   DC    PL5'0'
+PSUM     DC    PL4'0'
+SAVEC    DS    18F'0'
+***********************************
+*
+*  Register usage:
+*   15
+*   14    Exit
+*   13    Save Area
+*   1     $
+*   2     TABLE
+*   3     ENTRY
+*   4     Buffer
+*   5     page number
+*   6     Start Table
+***********************************
+TRANS   CSECT
+         STM   14,12,12(13)
+         LR    12,15
+         USING TRANS,10
+         USING ENTRY,2
+         LA    14,SAVED
+         ST    13,4(,14)
+         ST    14,8(,13)
+         LR    13,14
+*
+         LM    2,5,0(1) Load Params
+         LR    6,2      Save the start of table in R6
+         AP    0(2,5),=PL1'1' Add one to the page num
+         MVC   TPAGE(4),=X'40202120'
+         ED    TPAGE(4),0(5) Format Page number
+         XPRNT THEAD,80 Print pae header
+         XPRNT THEADA,77  print table header
+         ZAP   TSC,=PL1'0' Zero out suc
+         ZAP   TEC,=PL1'0' Zero out Err
+TLOOP    XREAD 0(,4),80    Read in transaction
+         BL    TEND        End if nothing
+         USING CHANGE,4    R4 formats transaction
+         LR    2,6         reset R2 pointer
+         PACK  TNUM(4),CAMOUNT(7) Pack the transaction amount
+         MVC   EAMOUNT(10),=X'4020206B2021204B2020'
+         LA    1,EAMOUNT+6
+         EDMK  EAMOUNT(10),TNUM format transaction
+         BCTR  1,0
+         MVC   0(1,1),=CL1'$' Add $
+         MVC   TAMOUNT(10),EAMOUNT Copy Transaction amount
+         CLC   CTYPE(1),=CL1'B' Balance
+         BE    EBAL
+         CLC   CTYPE(1),=CL1'D' Deposit
+         BE    EDEP
+         CLC   CTYPE(1),=CL1'W' Withdrawl
+         BE    EWIT
+*
+EWIT     MVC   ETYPE(17),=CL17'Withdrawal       '
+         MVC   TTYPE(17),ETYPE  Add type to output lines
+         B     TSKIP
+*
+EDEP     MVC   ETYPE(17),=CL17'Deposit          '
+         MVC   TTYPE(17),ETYPE  Add type to output lines
+         B     TSKIP
+*
+EBAL     MVC   ETYPE(17),=CL17'Balance Query    '
+         MVC   TTYPE(17),ETYPE  Add type to output lines
+*
+TSKIP    DS    0H
+         MVC   EID(8),CID
+         MVC   TID(8),CID
+         MVC   EDATE(4),CYEAR
+         MVC   EDATE+4(1),=C'/'
+         MVC   EDATE+5(2),CMONTH
+         MVC   EDATE+7(1),=C'/'
+         MVC   EDATE+8(2),CDAY
+         MVC   TDATE(2),CMONTH
+         MVC   TDATE+2(1),=C'/'
+         MVC   TDATE+3(2),CDAY
+         MVC   TDATE+5(1),=C'/'
+         MVC   TDATE+6(4),CYEAR
+FLOOP    DS    0H
+         C     2,0(,3)   Check if end of table
+         BE    TERR      Branch to error
+         CLC   ID(8),CID  Compare IDs
+         BE    TYPE
+         LA    2,32(,2)   Advance pointer
+         B     FLOOP      Top of loop
+TYPE     DS    0H
+         MVC   TT(2),=CL2'  '
+         CLC   CTYPE(1),=CL1'B'
+         BE    TBBAL
+         CLC   CTYPE(1),=CL1'D'
+         BE    TBDEP
+         CLC   CTYPE(1),=CL1'W'
+         BE    TBWIT
+         B     TEND
+TBBAL    DS    0H
+         AP    BAL,=PL1'0'
+         BH    TBEND
+         MVC   TT(2),=CL2'CR'  check if credit
+         MVC   TAMOUNT(10),=CL10'             ' Clear Transaction
+         B     TBEND
+TBDEP    DS    0H
+         SP    BAL,TNUM
+         BH    TBEND
+         MVC   TT(2),=CL2'CR'  check if credit
+         B     TBEND
+TBWIT    DS    0H
+         AP    BAL,TNUM
+         BH    TBEND
+         MVC   TT(2),=CL2'CR'  check if credit
+TBEND    DS    0H
+         MVC   TBAL(10),=X'4020206B2021204B2020'
+         LA    1,TBAL+6
+         EDMK  TBAL(10),BAL
+         BCTR  1,0
+         MVC   0(1,1),=CL1'$'
+         XPRNT TPRINT,80
+         AP    TSC,=PL1'1'
+         B     TLOOP
+TERR     DS    0H
+         XPRNT ERROR,82
+         AP    TEC,=PL1'1'
+         MVI   ETYPE,C' '
+         MVI   EAMOUNT,C' '
+         B     TLOOP top of loop
+TEND     DS    0H
+         MVC   TSCN(4),=X'40202020'
+         MVC   TECN(4),=X'40202020'
+         ED    TSCN(4),TSC
+         ED    TECN(4),TEC
+         XPRNT TSCP,30
+         XPRNT TECP,30
+*
+         L     13,4(,13)
+         LM    14,12,12(13)
+         BR    14           End
+         LTORG
+TEDIT    DS    PL4'0'
+TNUM     DS    PL4'0'
+*
+ERROR    DC    CL12'0Error   ID '
+EID      DS    8C' '
+         DC    CL21' was not found for a '
+ETYPE    DS    CL17'                 '
+EAMOUNT  DS    CL10'          '
+         DC    CL4' on '
+EDATE    DS    10C' '
+*
+TPRINT   DC    CL5'0    '
+TID      DS    CL8
+         DC    5C' '
+TTYPE    DS    17C' '
+TAMOUNT  DS    10C' '
+         DC    5C' '
+TDATE    DS    10C' '
+         DC    7C' '
+TBAL     DS    10C' '
+         DC    1C' '
+TT       DS    2C' '
+THEAD    DC    CL43'1                              Transaction '
+         DC    CL33'Report                       Page'
+TPAGE    DS    4C' '
+THEADA   DC    CL38'-   Customer ID     Transaction       '
+         DC    CL39'Amount          Date            Balance'
+TEC      DS    PL2'0'
+TSC      DS    PL2'0'
+TSCP     DC    CL26'1Successful transactions: '
+TSCN     DS    4C' '
+TECP     DC    CL26'-Failed transactions:     '
+TECN     DS    4C' '
+*
+SAVED    DS    18F'0'
+***********************************
+         END   MAIN
+/*
+//FT05F001  DD  DSN=KC02314.AUTUMN19.CSCI360.HW6DATA,DISP=SHR
+//

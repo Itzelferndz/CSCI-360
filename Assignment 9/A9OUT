@@ -1,0 +1,122 @@
+1                   J E S 2  J O B  L O G  --  S Y S T E M  2 9 6 4  --  N O D E  S V S C J E S 2        
+0 
+ 19.18.42 JOB07020 ---- TUESDAY,   28 APR 2020 ----
+ 19.18.42 JOB07020  IRR010I  USERID KC03C9D  IS ASSIGNED TO THIS JOB.
+ 19.18.42 JOB07020  ICH70001I KC03C9D  LAST ACCESS AT 19:08:30 ON TUESDAY, APRIL 28, 2020
+ 19.18.43 JOB07020  $HASP373 KC03C9DS STARTED - INIT 2    - CLASS A        - SYS 2964
+ 19.18.43 JOB07020  ICH408I USER(KC03C9D ) GROUP(KC148   ) NAME(####################)  375
+    375               KC02314.SPRING20.CSCI360.HW9DRVR CL(DATASET ) VOL(KCTR09)
+    375               INSUFFICIENT ACCESS AUTHORITY
+    375               FROM KC02314.* (G)
+    375               ACCESS INTENT(READ   )  ACCESS ALLOWED(NONE   )
+ 19.18.43 JOB07020  IEC150I 913-38,IFG0194E,KC03C9DS,STEP1,SYSIN-0002,9103,KCTR09,  376
+    376             KC02314.SPRING20.CSCI360.HW9DRVR
+ 19.18.43 JOB07020  IEA995I SYMPTOM DUMP OUTPUT  377
+    377             SYSTEM COMPLETION CODE=913  REASON CODE=00000038
+    377              TIME=19.18.43  SEQ=25620  CPU=0000  ASID=0031
+    377              PSW AT TIME OF ERROR  075C1000   80E37598  ILC 2  INTC 0D
+    377                NO ACTIVE MODULE FOUND
+    377                NAME=UNKNOWN
+    377                DATA AT PSW  00E37592 - 4100302C  0A0D010D  A7E5014B
+    377                AR/GR 0: 007FE990/00E378A0   1: 00000000/A4913000
+    377                      2: 00000000/0000AB40   3: 00000000/00E37874
+    377                      4: 00000000/007C74A8   5: 00000000/007C77A4
+    377                      6: 00000000/007C774C   7: 00000000/007C77A4
+    377                      8: 00000000/007C776C   9: 00000000/007C4080
+    377                      A: 00000000/007C8B20   B: 00000000/00E3A6D2
+    377                      C: 00000000/80E3A92E   D: 00000000/7F5C4CE8
+    377                      E: 00000000/80E36DF6   F: 00000000/00000038
+    377              END OF SYMPTOM DUMP
+ 19.18.43 JOB07020  IEF450I KC03C9DS STEP1 - ABEND=S913 U0000 REASON=00000038
+ 19.18.43 JOB07020  $HASP395 KC03C9DS ENDED - ABEND=S913
+0------ JES2 JOB STATISTICS ------
+-  28 APR 2020 JOB EXECUTION DATE
+-           33 CARDS READ
+-          126 SYSOUT PRINT RECORDS
+-            0 SYSOUT PUNCH RECORDS
+-           11 SYSOUT SPOOL KBYTES
+-         0.00 MINUTES EXECUTION TIME
+         1 //KC03C9DS JOB ,'ITZEL FERNANDEZ',MSGCLASS=H                            JOB07020
+         2 //STEP1   EXEC  PGM=ASSIST,PARM='MACRO=H'                                       
+         3 //STEPLIB   DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                             
+         4 //SYSPRINT  DD  SYSOUT=*                                                        
+         5 //SYSIN     DD  *                                                               
+         6 //          DD DSN=KC02314.SPRING20.CSCI360.HW9DRVR,DISP=SHR                    
+         7 //FT05F001  DD DUMMY                                                            
+         8 //FT06F001  DD SYSOUT=*                                                         
+ ICH70001I KC03C9D  LAST ACCESS AT 19:08:30 ON TUESDAY, APRIL 28, 2020
+ IEFA111I KC03C9DS IS USING THE FOLLOWING JOB RELATED SETTINGS:
+          SWA=ABOVE,TIOT SIZE=32K,DSENQSHR=DISALLOW,GDGBIAS=JOB
+ IEF236I ALLOC. FOR KC03C9DS STEP1
+ IGD103I SMS ALLOCATED TO DDNAME STEPLIB
+ IEF237I JES2 ALLOCATED TO SYSPRINT
+ IEF237I JES2 ALLOCATED TO SYSIN
+ IGD103I SMS ALLOCATED TO DDNAME
+ IEF237I DMY  ALLOCATED TO FT05F001
+ IEF237I JES2 ALLOCATED TO FT06F001
+ ICH408I USER(KC03C9D ) GROUP(KC148   ) NAME(####################)
+   KC02314.SPRING20.CSCI360.HW9DRVR CL(DATASET ) VOL(KCTR09)
+   INSUFFICIENT ACCESS AUTHORITY
+   FROM KC02314.* (G)
+   ACCESS INTENT(READ   )  ACCESS ALLOWED(NONE   )
+ IEC150I 913-38,IFG0194E,KC03C9DS,STEP1,SYSIN-0002,9103,KCTR09,
+ KC02314.SPRING20.CSCI360.HW9DRVR
+ IEA995I SYMPTOM DUMP OUTPUT
+ SYSTEM COMPLETION CODE=913  REASON CODE=00000038
+  TIME=19.18.43  SEQ=25620  CPU=0000  ASID=0031
+  PSW AT TIME OF ERROR  075C1000   80E37598  ILC 2  INTC 0D
+    NO ACTIVE MODULE FOUND
+    NAME=UNKNOWN
+    DATA AT PSW  00E37592 - 4100302C  0A0D010D  A7E5014B
+    AR/GR 0: 007FE990/00E378A0   1: 00000000/A4913000
+          2: 00000000/0000AB40   3: 00000000/00E37874
+          4: 00000000/007C74A8   5: 00000000/007C77A4
+          6: 00000000/007C774C   7: 00000000/007C77A4
+          8: 00000000/007C776C   9: 00000000/007C4080
+          A: 00000000/007C8B20   B: 00000000/00E3A6D2
+          C: 00000000/80E3A92E   D: 00000000/7F5C4CE8
+          E: 00000000/80E36DF6   F: 00000000/00000038
+  END OF SYMPTOM DUMP
+ IEF472I KC03C9DS STEP1 - COMPLETION CODE - SYSTEM=913 USER=0000 REASON=00000038
+ IGD104I KC02293.ASSIST.LOADLIB                       RETAINED,  DDNAME=STEPLIB 
+ IEF285I   KC03C9D.KC03C9DS.JOB07020.D0000102.?         SYSOUT        
+ IEF285I   KC03C9D.KC03C9DS.JOB07020.D0000101.?         SYSIN         
+ IGD104I KC02314.SPRING20.CSCI360.HW9DRVR             RETAINED,  DDNAME=        
+ IEF285I   KC03C9D.KC03C9DS.JOB07020.D0000103.?         SYSOUT        
+ IEF373I STEP/STEP1   /START 2020119.1918
+ IEF032I STEP/STEP1   /STOP  2020119.1918 
+         CPU:     0 HR  00 MIN  00.00 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+         VIRT:   584K  SYS:   248K  EXT:        8K  SYS:    13528K
+         ATB- REAL:                  4128K  SLOTS:                     0K
+              VIRT- ALLOC:      13M SHRD:       0M
+ IEF375I  JOB/KC03C9DS/START 2020119.1918
+ IEF033I  JOB/KC03C9DS/STOP  2020119.1918 
+         CPU:     0 HR  00 MIN  00.00 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+1*** ASSIST 4.0/A2-05/15/82  470/V7A/0:OS/VS2  INS=SDFP7/X=BGHO, CHECK/TRC/=1180, OPTS=CDKMPR FROM PENN ST*NIU COMPSCI*LT         
+0MACRO=H                                                                                                                          
+0                                                                                                               PAGE    1         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                       1          MACRO                                                                           
+                                       2          STRLEN &STR,&LEN                                                                
+                                       3          AIF    ('&STR' EQ ' ').ERROR                                                    
+                                       4          AIF    ('&LEN' EQ ' ').ERROR                                                    
+                                       5          B      D&SYSNDX                                                                 
+                                       6 A&SYSNDX DS     F                                                                        
+                                       7 B&SYSNDX DS     F                                                                        
+                                       8 C&SYSNDX DS     F                                                                        
+                                       9 D&SYSNDX ST     4,A&SYSNDX                                                               
+                                      10          ST     5,B&SYSNDX                                                               
+                                      11          ST     6,C&SYSNDX                                                               
+                                      12          SR     6,6                                                                      
+                                      13          LA     4,&STR                                                                   
+                                      14 E&SYSNDX ICM    5,B'1000',0(4)                                                           
+                                      15          CLM    5,B'1000',=X'00'                                                         
+                                      16          BE     F&SYSNDX                                                                 
+                                      17          LA     6,=F'1'                                                                  
+                                      18          B      E&SYSNDX                                                                 
+                                      19 F&SYSNDX ST     6,&LEN                                                                   
+                                      20          L      5,B&SYSNDX                                                               
+                                      21          L      6,C&SYSNDX                                                               
+                                      22          L      4,A&SYSNDX                                                               
+                                      23          MEXIT                                                                           
+                                      24 .ERROR   MNOTE  'MISSING ARGUMENT'                                                       

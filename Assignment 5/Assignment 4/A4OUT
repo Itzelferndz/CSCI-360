@@ -1,0 +1,206 @@
+1                   J E S 2  J O B  L O G  --  S Y S T E M  2 9 6 4  --  N O D E  S V S C J E S 2        
+0 
+ 00.04.46 JOB03700 ---- MONDAY,    02 MAR 2020 ----
+ 00.04.46 JOB03700  IRR010I  USERID KC03C9D  IS ASSIGNED TO THIS JOB.
+ 00.04.46 JOB03700  ICH70001I KC03C9D  LAST ACCESS AT 00:01:39 ON MONDAY, MARCH 2, 2020
+ 00.04.46 JOB03700  $HASP373 KC03C9DS STARTED - INIT 2    - CLASS A        - SYS 2964
+ 00.04.46 JOB03700  -                                      -----TIMINGS (MINS.)------                          -----PAGING COUNTS-
+ 00.04.46 JOB03700  -STEPNAME PROCSTEP    RC   EXCP   CONN       TCB       SRB  CLOCK          SERV  WORKLOAD  PAGE  SWAP   VIO SW
+ 00.04.46 JOB03700  -STEP1                00     61      5       .00       .00     .0             8  BATCH        0     0     0   
+ 00.04.46 JOB03700  -KC03C9DS ENDED.  NAME-ITZEL FERNANDEZ      TOTAL TCB CPU TIME=      .00 TOTAL ELAPSED TIME=    .0
+ 00.04.46 JOB03700  $HASP395 KC03C9DS ENDED - RC=0000
+0------ JES2 JOB STATISTICS ------
+-  02 MAR 2020 JOB EXECUTION DATE
+-          121 CARDS READ
+-          552 SYSOUT PRINT RECORDS
+-            0 SYSOUT PUNCH RECORDS
+-           24 SYSOUT SPOOL KBYTES
+-         0.00 MINUTES EXECUTION TIME
+         1 //KC03C9DS JOB ,'ITZEL FERNANDEZ',MSGCLASS=H                            JOB03700
+         2 //STEP1 EXEC PGM=ASSIST                                                         
+         3 //STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                                
+         4 //SYSPRINT DD SYSOUT=*                                                          
+         5 //SYSIN DD *                                                                    
+         6 //FT05F001  DD  DSN=KC02314.SPRING20.CSCI360.HW4DATA,DISP=SHR                   
+ ICH70001I KC03C9D  LAST ACCESS AT 00:01:39 ON MONDAY, MARCH 2, 2020
+ IEFA111I KC03C9DS IS USING THE FOLLOWING JOB RELATED SETTINGS:
+          SWA=ABOVE,TIOT SIZE=32K,DSENQSHR=DISALLOW,GDGBIAS=JOB
+ IEF236I ALLOC. FOR KC03C9DS STEP1
+ IGD103I SMS ALLOCATED TO DDNAME STEPLIB
+ IEF237I JES2 ALLOCATED TO SYSPRINT
+ IEF237I JES2 ALLOCATED TO SYSIN
+ IGD103I SMS ALLOCATED TO DDNAME FT05F001
+ IEF142I KC03C9DS STEP1 - STEP WAS EXECUTED - COND CODE 0000
+ IGD104I KC02293.ASSIST.LOADLIB                       RETAINED,  DDNAME=STEPLIB 
+ IEF285I   KC03C9D.KC03C9DS.JOB03700.D0000102.?         SYSOUT        
+ IEF285I   KC03C9D.KC03C9DS.JOB03700.D0000101.?         SYSIN         
+ IGD104I KC02314.SPRING20.CSCI360.HW4DATA             RETAINED,  DDNAME=FT05F001
+ IEF373I STEP/STEP1   /START 2020062.0004
+ IEF032I STEP/STEP1   /STOP  2020062.0004 
+         CPU:     0 HR  00 MIN  00.01 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+         VIRT:   584K  SYS:   248K  EXT:        0K  SYS:    13540K
+         ATB- REAL:                  4116K  SLOTS:                     0K
+              VIRT- ALLOC:      11M SHRD:       0M
+ IEF375I  JOB/KC03C9DS/START 2020062.0004
+ IEF033I  JOB/KC03C9DS/STOP  2020062.0004 
+         CPU:     0 HR  00 MIN  00.01 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+1*** ASSIST 4.0/A2-05/15/82  470/V7A/0:OS/VS2  INS=SDFP7/X=BGHO, CHECK/TRC/=1180, OPTS=CDKMPR FROM PENN ST*NIU COMPSCI*LT         
+0                                                                                                                                 
+0                                                                                                               PAGE    1         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                       1 *************************************************                                        
+                                       2 * ASSIGN: 4- INTERNAL SUBROUTINES                                                        
+                                       3 * NAME: ITZEL FERNANDEZ                                                                  
+                                       4 * 15   BASE REGISTER                                                                     
+                                       5 * 11   SUBROUTINES                                                                       
+                                       6 * 1    THE ADRESS OF PARMS                                                               
+                                       7 *                                                                                        
+                                       8 *                                                                                        
+                                       9 *************************************************                                        
+ 000000                               10 MAIN     CSECT                                                                           
+ 000000                               11          USING MAIN,15                                                                   
+ 000000 900F F240            00240    12          STM   0,15,MAINSAVE                                                             
+ 000004 4110 F234            00234    13          LA    1,PARMS                                                                   
+ 000008 45B0 F020            00020    14          BAL   11,BUILD                                                                  
+ 00000C 45B0 F05C            0005C    15          BAL   11,PRINT                                                                  
+ 000010 45B0 F0C4            000C4    16          BAL   11,EVENS                                                                  
+ 000014 980F F240            00240    17          LM    0,15,MAINSAVE                                                             
+ 000018 07FE                          18          BR    14                                                                        
+                                      19          LTORG                                                                           
+                                      20 **********************************                                                       
+ 000020                               21 BUILD    DS    0H                                                                        
+ 000020 1B66                          22          SR    6,6                                                                       
+ 000022 900F F280            00280    23          STM   0,15,BSAVE                                                                
+ 000026 9823 1000            00000    24          LM    2,3,0(1)                                                                  
+ 00002A E000 F3F3 0050 003F3          25 BLOOP    XREAD BUFFER,80                                                                 
+ 000030 4740 F056            00056    26          BL    BEND                                                                      
+ 000034 5320 1000            00000    27 BLOOP1   XDECI 2,0(0,1)                                                                  
+ 000038 4710 F02A            0002A    28          BO    BLOOP                                                                     
+ 00003C 5A60 F448            00448    29          A     6,=F'1'                                                                   
+ 000040 5020 F234            00234    30          ST    2,PARMS                                                                   
+ 000044 4130 F238            00238    31          LA    3,PARMS+4                                                                 
+ 000048 1934                          32          CR    3,4                                                                       
+ 00004A 4780 F056            00056    33          BE    BEND                                                                      
+ 00004E 5893 0000            00000    34          L     9,0(3)                                                                    
+ 000052 47F0 F034            00034    35          B     BLOOP1                                                                    
+ 000056 980F F280            00280    36 BEND     LM    0,15,BSAVE                                                                
+ 00005A 07FB                          37          BR    11                                                                        
+                                      38 **********************************                                                       
+ 00005C                               39 PRINT    DS    0H                                                                        
+ 00005C E020 F340 002C 00340          40          XPRNT PHEAD,44                                                                  
+ 000062 900F F2C0            002C0    41          STM   0,15,PSAVE                                                                
+ 000066 9823 1000            00000    42          LM    2,3,0(1)                                                                  
+ 00006A 5850 F234            00234    43          L     5,PARMS                                                                   
+ 00006E 5860 F44C            0044C    44 PLOOP    L     6,=F'7'                                                                   
+ 000072 4120 F3B5            003B5    45          LA    2,PLINE+1                                                                 
+ 000076 9240 F3B5      003B5          46          MVI   PLINE+1,C' '                                                              
+ 00007A D23A F3B6 F3B5 003B6 003B5    47          MVC   PLINE+2(59),PLINE+1                                                       
+ 000080 5950 F450            00450    48 PLOOP1   C     5,=F'0'                                                                   
+ 000084 4780 F0B8            000B8    49          BE    PEND1                                                                     
+ 000088 5870 F234            00234    50          L     7,PARMS                                                                   
+ 00008C 5270 F36C            0036C    51          XDECO 7,TEMP                                                                    
+ 000090 D20B 2000 F36C 00000 0036C    52          MVC   0(12,2),TEMP                                                              
+1                                                                                                               PAGE    2         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000096 4120 200C            0000C    53          LA    2,12(0,2)                                                                 
+ 00009A 4130 3004            00004    54          LA    3,4(0,3)                                                                  
+ 00009E 5B50 F448            00448    55          S     5,=F'1'                                                                   
+ 0000A2 5B60 F448            00448    56          S     6,=F'1'                                                                   
+ 0000A6 5960 F450            00450    57          C     6,=F'0'                                                                   
+ 0000AA 4770 F080            00080    58          BNE   PLOOP1                                                                    
+ 0000AE E020 F3B4 003D 003B4          59          XPRNT PLINE,61                                                                  
+ 0000B4 47F0 F06E            0006E    60          B     PLOOP                                                                     
+ 0000B8 E020 F3B4 003D 003B4          61 PEND1    XPRNT PLINE,61                                                                  
+ 0000BE 980F F2C0            002C0    62 PEND     LM    0,15,PSAVE                                                                
+ 0000C2 07FB                          63          BR    11                                                                        
+                                      64 **********************************                                                       
+ 0000C4                               65 EVENS    DS    0H                                                                        
+ 0000C4 E020 F378 0030 00378          66          XPRNT EHEAD,48                                                                  
+ 0000CA 900F F300            00300    67          STM   0,15,ESAVE                                                                
+ 0000CE 9823 1000            00000    68          LM    2,3,0(1)                                                                  
+ 0000D2 5850 F234            00234    69          L     5,PARMS                                                                   
+ 0000D6 5880 F454            00454    70 ELOOP    L     8,=F'5'                                                                   
+ 0000DA 4120 F3B5            003B5    71          LA    2,PLINE+1                                                                 
+ 0000DE 9240 F3B5      003B5          72          MVI   PLINE+1,C' '                                                              
+ 0000E2 D23A F3B6 F3B5 003B6 003B5    73          MVC   PLINE+2(59),PLINE+1                                                       
+ 0000E8 5950 F450            00450    74 ELOOP1   C     5,=F'0'                                                                   
+ 0000EC 4780 F134            00134    75          BE    EEND1                                                                     
+ 0000F0 5870 F234            00234    76          L     7,PARMS                                                                   
+ 0000F4 5B50 F448            00448    77          S     5,=F'1'                                                                   
+ 0000F8 5C60 F448            00448    78          M     6,=F'1'                                                                   
+ 0000FC 5D60 F458            00458    79          D     6,=F'2'                                                                   
+ 000100 5960 F450            00450    80          C     6,=F'0'                                                                   
+ 000104 4770 F11E            0011E    81          BNE   SKIP                                                                      
+ 000108 5860 F234            00234    82          L     6,PARMS                                                                   
+ 00010C 5260 F3A8            003A8    83          XDECO 6,TEMP1                                                                   
+ 000110 D20B 2000 F3A8 00000 003A8    84          MVC   0(12,2),TEMP1                                                             
+ 000116 4120 200C            0000C    85          LA    2,12(0,2)                                                                 
+ 00011A 5B80 F448            00448    86          S     8,=F'1'                                                                   
+ 00011E 4130 3000            00000    87 SKIP     LA    3,0(0,3)                                                                  
+ 000122 5980 F450            00450    88          C     8,=F'0'                                                                   
+ 000126 4780 F0E8            000E8    89          BE    ELOOP1                                                                    
+ 00012A E020 F3B4 003F 003B4          90          XPRNT PLINE,63                                                                  
+ 000130 47F0 F0D6            000D6    91          B     ELOOP                                                                     
+ 000134 E020 F3B4 003F 003B4          92 EEND1    XPRNT PLINE,63                                                                  
+ 00013A 980F F300            00300    93 EEND     LM    0,15,ESAVE                                                                
+ 00013E 07FB                          94          BR    11                                                                        
+                                      95 **********************************                                                       
+ 000140                               96 TABLE    DS    60F'-256'                                                                 
+ 000230                               97 EOT      DS    0H                                                                        
+ 000230                               98 TLEN     DS    F'0'                                                                      
+ 000234 00000140                      99 PARMS    DC    A(TABLE)                                                                  
+ 000238 00000230                     100          DC    A(EOT)                                                                    
+ 00023C 00000230                     101          DC    A(TLEN)                                                                   
+ 000240                              102 MAINSAVE DS    16F                                                                       
+ 000280                              103 BSAVE    DS    16F                                                                       
+ 0002C0                              104 PSAVE    DS    16F                                                                       
+ 000300                              105 ESAVE    DS    16F                                                                       
+ 000340 F140404040404040             106 PHEAD    DC    CL44'1                            LIST OF NUMBERS'                        
+ 00036C 4040404040404040             107 TEMP     DC    CL12' '                                                                   
+ 000378 F140404040404040             108 EHEAD    DC    CL48'1                               EVEN NUMBERS'                        
+ 0003A8 4040404040404040             109 TEMP1    DC    CL12' '                                                                   
+1                                                                                                               PAGE    3         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 0003B4 F0                           110 PLINE    DC    CL1'0'                                                                    
+ 0003B5                              111          DS    CL62' '                                                                   
+ 0003F3                              112 BUFFER   DS    CL80                                                                      
+ 000443 5C                           113          DC    C'*'                                                                      
+                                     114          END   MAIN                                                                      
+ 000448 00000001                     115                =F'1'                                                                     
+ 00044C 00000007                     116                =F'7'                                                                     
+ 000450 00000000                     117                =F'0'                                                                     
+ 000454 00000005                     118                =F'5'                                                                     
+ 000458 00000002                     119                =F'2'                                                                     
+0***  NO   STATEMENTS FLAGGED -  NO   WARNINGS,  NO   ERRORS                                                                      
+0*** DYNAMIC CORE AREA USED:  LOW:    4128 HIGH:     996 LEAVING:  488444 FREE BYTES. AVERAGE:       42 BYTES/STMT ***            
+0*** ASSEMBLY TIME =    0.000 SECS,   120000 STATEMENTS/SEC ***                                                                   
+0*** PROGRAM EXECUTION BEGINNING - ANY OUTPUT BEFORE EXECUTION TIME MESSAGE IS PRODUCED BY USER PROGRAM ***                       
+1                            LIST OF NUMBERS                                                                                      
+0         320         320         320         320         320         320         320                                                         
+0      -18467        -169         -58        5705      -16827        2995        5436                                                
+0         902         382         718       11008       14989         485          23                                                
+0        9503           6          76           4           6      -26924          29                                                
+0          97        3290          17          13         355          74        -350                                                
+0        -724           7         -37          53       -8909          21          46                                                
+0          13         588          10          26       -1869       -6299          26                                                
+0         333      -15141         868         662         859        -529          35                                                
+0        -288       -8942       27446       -6729           6        3548         -84                                                
+0        -840      -13931       32439       -5537         320         320         320  
+0         320         320         320         320         320         320         320                                                                                                                                            
+1                               EVEN NUMBERS                                                                                      
+                                                                                                                     
+0         -58        5436         902         382         718                                                                        
+0       11008           6          76           4           6                                                                        
+0      -26924        3290          74        -350        -724                                                                        
+0          46         588          10          26          26                                                                        
+0         868         662        -288       -8942       27446                                                                        
+0           6        3548         -84        -840    
+0         320                                                                                                                     
+0         320                                                                                                                     
+0         320                                                                                                                     
+0         320                                                                                                                     
+0         320                                                                                                                 
+                                                                                                                    
+                                                                                          
+0*** EXECUTION TIME =    0.004 SECS.     10982 INSTRUCTIONS EXECUTED -  2745500 INSTRUCTIONS/SEC ***                              
+0*** AM004 - NORMAL USER TERMINATION BY RETURN ***                                                                                

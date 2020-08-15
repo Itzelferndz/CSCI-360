@@ -1,0 +1,113 @@
+//KC03C9DS JOB ,'ITZEL FERNANDEZ',MSGCLASS=H
+//STEP1    EXEC  PGM=ASSIST
+//STEPLIB    DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT   DD  SYSOUT=*
+//SYSIN      DD  *
+****************************************************
+*
+* Assignment: Extra credit(A)
+* Name: ITZEL FERNANDEZ
+*
+*****************************************************
+LINE     DSECT      Format for Table
+NUM1     DS     CL6
+         DS     CL2
+NUM2     DS     CL6
+*****************************************************
+*Name: Main
+*
+* compute the value of the first
+* number as the nearest multiple of the second number
+*
+*****************************************************
+MAIN     CSECT
+         USING MAIN,15
+         ST    14,EXIT         save exit
+         LA    13,SAVE1        save1 = save area
+*
+         USING LINE,12
+         XPRNT HEAD,45         print header
+LOOP     DS    0H
+         XREAD BUFFER,80
+         BL    MLOOP             check end line
+         MVC   FA(6),=X'402020202120'
+         MVC   FB(6),=X'402020202120'
+         MVC   FR(6),=X'402020202120'
+         LA    12,BUFFER         load location
+         PACK  TEMP1(8),NUM1(6)
+         PACK  TEMP2(8),NUM2(6)
+         CVB   5,TEMP1        convert to binary
+         CVB   3,TEMP2        convert to binary
+         LA    1,FA+5
+         EDMK  FA(6),TEMP1+5
+         C     5,=F'0'        check if negative
+         BNL   FIRST          goto first if positive
+         BCTR  1,0            decrement register 1
+         MVI   0(1),C'-'
+FIRST    DS    0H
+         LA    1,FB+5         sign location
+         EDMK  FB(6),TEMP2+5  format
+         C     3,=F'0'        check if negative
+         BNL   SECND          goto secnd if positive
+         BCTR  1,0
+         MVI   0(1),C'-'
+SECND    DS    0H
+         M     4,=F'1'
+         DR    4,3           divide
+         LR    7,5
+         LR    9,7           load answer
+         MR    8,3
+         C     3,=F'0'        check if negative
+         BH    SKIP           goto skip if positive
+         LR    11,3
+         M     10,=F'-1'
+         LR    3,11
+SKIP     DS    0H
+         LR    5,4
+         M     4,=F'2'
+         SR    6,6
+         C     5,=F'0'
+         BNL   FOUR
+         M     4,=F'-1'
+FOUR     DS    0H
+         CR    5,3
+         BL    PRNT
+         CVB   10,TEMP1
+         C     10,=F'0'
+         BNH   ELSE
+         AR    9,3
+         B     PRNT
+ELSE     DS    0H
+         SR    9,3
+PRNT     DS    0H
+         CVD   9,TEMP1        convert to packed
+         LA    1,FR+5         pointer
+         EDMK  FR(6),TEMP1+5  format the result
+         C     9,=F'0'        check if negative
+         BNL   THIRD          goto third if positive
+         BCTR  1,0            decrement
+         MVI   0(1),C'-'
+THIRD    DS    0H
+         XPRNT PLINE,41       print
+         B     LOOP
+MLOOP    DS    0H
+*
+         L     14,EXIT
+         BR    14           End program
+         LTORG              Literals are put here
+SAVE1    DS    18F'0'
+EXIT     DS    F
+BUFFER   DS    80C
+TEMP1    DS    D
+TEMP2    DS    D
+PLINE    DC    CL3'0  '
+FA       DS    6C
+         DC    CL10'          '
+FB       DS    6C
+         DC    CL10'          '
+FR       DS    6C
+HEAD     DC    CL45'1First Number   Second Number   Rounded Value'
+         END   MAIN
+/*
+//FT05F001  DD  DSN=KC02314.AUTUMN19.CSCI360.HWEXDATA,DISP=SHR
+//

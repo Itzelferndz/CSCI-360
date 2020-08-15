@@ -1,0 +1,122 @@
+//KC03C9DS JOB ,'ITZEL FERNANDEZ',MSGCLASS=H
+//STEP1 EXEC PGM=ASSIST
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT DD SYSOUT=*
+//SYSIN DD *
+*************************************************
+* ASSIGN: 4- INTERNAL SUBROUTINES
+* NAME: ITZEL FERNANDEZ
+* 15   BASE REGISTER
+* 11   SUBROUTINES
+* 1    THE ADRESS OF PARMS
+*
+*
+*************************************************
+MAIN     CSECT
+         USING MAIN,15
+         STM   0,15,MAINSAVE
+         LA    1,PARMS
+         BAL   11,BUILD
+         BAL   11,PRINT
+         BAL   11,EVENS
+         LM    0,15,MAINSAVE
+         BR    14
+         LTORG
+**********************************
+BUILD    DS    0H
+         SR    6,6
+         STM   0,15,BSAVE
+         LM    2,3,0(1)
+BLOOP    XREAD BUFFER,80
+         BL    BEND
+BLOOP1   XDECI 2,0(0,1)
+         BO    BLOOP
+         A     6,=F'1'
+         ST    2,PARMS
+         LA    3,PARMS+4
+         CR    3,4
+         BE    BEND
+         L     9,0(3)
+         B     BLOOP1
+BEND     LM    0,15,BSAVE
+         BR    11
+**********************************
+PRINT    DS    0H
+         XPRNT PHEAD,44
+         STM   0,15,PSAVE
+         LM    2,3,0(1)
+         L     5,PARMS
+PLOOP    L     6,=F'7'
+         LA    2,PLINE+1
+         MVI   PLINE+1,C' '
+         MVC   PLINE+2(59),PLINE+1
+PLOOP1   C     5,=F'0'
+         BE    PEND1
+         L     7,PARMS
+         XDECO 7,TEMP
+         MVC   0(12,2),TEMP
+         LA    2,12(0,2)
+         LA    3,4(0,3)
+         S     5,=F'1'
+         S     6,=F'1'
+         C     6,=F'0'
+         BNE   PLOOP1
+         XPRNT PLINE,61
+         B     PLOOP
+PEND1    XPRNT PLINE,61
+PEND     LM    0,15,PSAVE
+         BR    11
+**********************************
+EVENS    DS    0H
+         XPRNT EHEAD,48
+         STM   0,15,ESAVE
+         LM    2,3,0(1)
+         L     5,PARMS
+ELOOP    L     8,=F'5'
+         LA    2,PLINE+1
+         MVI   PLINE+1,C' '
+         MVC   PLINE+2(59),PLINE+1
+ELOOP1   C     5,=F'0'
+         BE    EEND1
+         L     7,PARMS
+         S     5,=F'1'
+         M     6,=F'1'
+         D     6,=F'2'
+         C     6,=F'0'
+         BNE   SKIP
+         L     6,PARMS
+         XDECO 6,TEMP1
+         MVC   0(12,2),TEMP1
+         LA    2,12(0,2)
+         S     8,=F'1'
+SKIP     LA    3,0(0,3)
+         C     8,=F'0'
+         BE    ELOOP1
+         XPRNT PLINE,63
+         B     ELOOP
+EEND1    XPRNT PLINE,63
+EEND     LM    0,15,ESAVE
+         BR    11
+**********************************
+TABLE    DS    60F'-256'
+EOT      DS    0H
+TLEN     DS    F'0'
+PARMS    DC    A(TABLE)
+         DC    A(EOT)
+         DC    A(TLEN)
+MAINSAVE DS    16F
+BSAVE    DS    16F
+PSAVE    DS    16F
+ESAVE    DS    16F
+PHEAD    DC    CL44'1                            LIST OF NUMBERS'
+TEMP     DC    CL12' '
+EHEAD    DC    CL48'1                               EVEN NUMBERS'
+TEMP1    DC    CL12' '
+PLINE    DC    CL1'0'
+         DS    CL62' '
+BUFFER   DS    CL80
+         DC    C'*'
+         END   MAIN
+/*
+//FT05F001  DD  DSN=KC02314.SPRING20.CSCI360.HW4DATA,DISP=SHR
+//

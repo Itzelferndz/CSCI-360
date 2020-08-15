@@ -1,0 +1,27 @@
+//KC03C9DS JOB ,'ITZEL FERNANDEZ',MSGCLASS=H
+//STEP1 EXEC PGM=ASSIST
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT DD SYSOUT=*
+//SYSIN DD *
+**************************************************************
+DEBUG1   CSECT
+         USING DEBUG1,15    Establish a base register 
+         L     3,FIRST      Load a number into register 2
+         L     4,SECOND     Load another number into register 4 
+         SR    3,4          Add the two numbers 
+         LA    5,THIRD      Register 5 will = address of THIRD
+         L     6,CONST      Put CONST's value in register 6
+         ST    3,0(5,6)     Store the result
+         XDUMP FOURTH,4     Dump the result
+         SR    6,6          Set register 6 to 0
+         BCR   B'1111',14   Return to caller 
+* This is a comment line.
+NOTE     DC    CL19'STORAGE STARTS HERE'      
+CONST    DC    F'2'         A constant = 2
+FIRST    DC    F'193'       A number
+SECOND   DC    F'89'        Another number 
+THIRD    DS    XL4'00'      Yet another number 
+FOURTH   DS    F            Difference of FIRST and SECOND
+         END   DEBUG1       Program ends here
+/*
+//

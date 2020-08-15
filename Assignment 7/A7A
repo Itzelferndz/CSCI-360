@@ -1,0 +1,302 @@
+//KC03C9DS JOB ,'ITZEL FERNANDEZ',MSGCLASS=H
+//STEP1    EXEC  PGM=ASSIST
+//STEPLIB    DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT   DD  SYSOUT=*
+//SYSIN      DD  *
+*************************************************************************
+* NAME: ITZEL FERNANDEZ
+* DATE:4/17/2020
+* CLASS: CSCI 360
+*			REGISTER USAGE
+*R1			R8			R15 BASE
+*R2			R9
+*R3			R10
+*R4			R11
+*R5			R12
+*R6			R13
+*R7			R14
+*************************************************************************
+MAIN     CSECT
+         STM   14,12,12(13)            STD ENTRY LINKAGE
+         LR    12,15
+         USING MAIN,12
+         LA    14,MAINSAV
+         ST    13,4(,14)
+         ST    14,8(,13)
+         LR    13,14
+         LA    1,PLIST                 4 SETS OF CALLING EXTERN
+         L     15,=V(BUILD)            SUBROUTINES (AND SETTING
+         BALR  14,15                   A VALUE IN THE PLIST)
+         MVC   OUTPTXT(22),=CL22'Initial Table Contents'
+         LA    1,PLIST
+         L     15,=V(PRINT)
+         BALR  14,15
+         LA    1,PLIST
+         L     15,=V(TRANS)
+         BALR  14,15
+         MVC   OUTPTXT(25),=CL25'Table After Transactions '
+         LA    1,PLIST
+         L     15,=V(PRINT)
+         BALR  14,15
+         L     13,4(,13)                STD EXIT LINKAGE
+         LM    14,12,12(13)
+         BR    14                       END OF ROUTINE
+         LTORG
+         ORG   MAIN+((*-MAIN+31)/32)*32
+TABLE    DS    1600C                   MAIN TABLE FOR STORAGE
+EOT      DC    A(TABLE)                END OF TABLE
+PLIST    DC    A(TABLE)                PARAMETER LIST
+         DC    A(EOT)
+         DC    A(OUTPTXT)
+MAINSAV  DS    18F                     MAIN SAVESPACE
+OUTPTXT  DC    25C' '                  TEXT FOR PRINT ROUTINE
+ENTRY    DSECT                         DUMMYSECT FOR EASE
+ID       DS    F
+LNAME    DS    12C
+FNAME    DS    10C
+SCORE1   DS    PL2
+SCORE2   DS    PL2
+SCORE3   DS    PL2
+*
+********************************************
+* Subroutine: BUILD
+*
+* Desc: Used to build a table with first names
+*       last names, and 3 scores.
+*
+* Expected parameters:
+* 1F: Addr of table
+* 2F: Addr of EOT
+*
+* REG USAGE:
+* 
+* R1 - Used by TRT for Offsets in cardspace
+* R2 - Used by TRT
+* R3 - Table Address cursor
+* R4 - EOT ptr
+* R5 - Addr of Readble data
+* R6 - Addr of Non-Readble data & Length of 
+*      Readable Data
+*
+********************************************
+BUILD    CSECT
+         STM   14,12,12(13)            STD ENTRY LINKAGE
+         LR    12,15
+         USING BUILD,12
+         LA    14,BUISAVE
+         ST    13,4(0,14)
+         ST    14,8(0,13)
+         LR    13,14
+         USING ENTRY,3                 DSECT FOR EASE
+         LM    3,4,0(1)                LOAD PLIST
+LSRT     XREAD CARD,80                 READ SOME DATA
+         BC    B'0100',LEND            BR ON EOF
+         PACK  PACHOLD(8),CARD(8)      GET AND PACK ID
+         CVB   5,PACHOLD
+         C     5,=F'0'                 IF ID IS 0, END LOOP
+         BE    LEND
+         ST    5,ID                    STORE ID
+         LA    1,CARD+8                LOAD CARD CURSOR
+*                                      LOGIC FOR F&LNAME:
+*                                      FIND WHERE CHARACTERS
+*                                      BEGIN, FIND WHEN SPACES
+*                                      BEGIN, FIND THE DIFF
+*                                      SUBTRACT 1 FROM DIFF
+*                                      EXECUTE A MVC INSTRUC
+*                                      WITH THE LENGTH FOUND
+*                                      FROM DIFF. THEN FORMAT
+*                                      F&LNAME TO HAVE UPPER 
+*                                      CASE FOR 1ST LETTER, &
+         TRT   0(72,1),CHARAC          LOWER CASE FOR THE REST
+         LR    5,1                     CHAR BEGIN
+         TRT   0(72,1),SPACES
+         LR    6,1                     SPACES BEGIN
+         SR    6,5                     FIND DIFF
+         BCTR  6,0                     DIFF-1
+         EX    6,EXTOLO                EXEC MVC
+         TR    0(1,5),TOUPPER          FORMAT TEXT
+         EX    6,EXFNMST
+         MVC   FNAME(10),FNMHOLD
+         MVC   FNMHOLD(10),=CL10'          '
+         TRT   0(72,1),CHARAC
+         LR    5,1                     CHAR BEGIN
+         TRT   0(72,1),SPACES
+         LR    6,1                     SPACES BEGIN
+         SR    6,5                     FIND DIFF
+         BCTR  6,0                     DIFF-1
+         EX    6,EXTOLO                EXEC MVC
+         TR    0(1,5),TOUPPER          FORMAT TEXT
+         EX    6,EXLNMST
+         MVC   LNAME(12),LNMHOLD
+         MVC   LNMHOLD(12),=CL12'            '
+*                                      THE SCORES ARE TEH
+*                                      SAME AS F&LNAME JUST
+*                                      NOT CONVERTING THEM
+         TRT   0(72,1),NUMS            TO DIFFRENT CASES
+         LR    5,1                     NUM BEGIN
+         TRT   0(72,1),SPACES
+         LR    6,1                     SPACE BEGIN
+         SR    6,5                     FIND DIFF
+         BCTR  6,0                     DIF-1
+         EX    6,NUMST                 PACK
+         ZAP   SCORE1(2),NUMHOLD(2)
+         TRT   0(72,1),NUMS
+         LR    5,1                     NUM BEGIN
+         TRT   0(72,1),SPACES
+         LR    6,1                     SPACE BEGIN
+         SR    6,5                     FIND DIFF
+         BCTR  6,0                     DIF-1
+         EX    6,NUMST                 PACK
+         ZAP   SCORE2(2),NUMHOLD(2)
+         TRT   0(72,1),NUMS
+         LR    5,1                     NUM BEGIN
+         TRT   0(72,1),NNUMS
+         LR    6,1                     NOT NUMS BEGIN
+         SR    6,5                     FIND DIFF
+         BCTR  6,0                     DIF-1
+         EX    6,NUMST                 PACK
+         ZAP   SCORE3(2),NUMHOLD(2)
+         LA    3,32(,3)                MOVE TABLE CURSOR
+         B     LSRT                    RESTART LOOP
+LEND     ST    3,0(,4)                 STORE EOT
+         DROP  3                       CLEAR ASSOCIATION
+         L     13,4(0,13)              STD EXIT LINKAGE
+         LM    14,12,12(13)
+         BR    14
+         LTORG
+BUISAVE  DS    18F
+PACHOLD  DS    D                       HOLDER FOR CVB
+EXLNMST  MVC   LNMHOLD(1),0(5)         STORER FOR EX
+EXFNMST  MVC   FNMHOLD(1),0(5)         STORER FOR EX
+NUMST    PACK  NUMHOLD(2),0(0,5)       PACKER FOR EX
+LNMHOLD  DC    12C' '                  PLACEHOLER FOR LNAME
+FNMHOLD  DC    10C' '                  PLACEHOLER FOR FNAME
+NUMHOLD  DS    PL2                     PLACEHOLER FOR SCORES
+EXTOLO   TR    0(0,5),TOLOWER          TRANSLATE FOR EX
+CARD     DS    CL80                    XREAD SPACE
+         DC    C'*'
+*                                      REST OF LABELS ARE FOR
+CHARAC   DC    256X'01'                TR AND TRT
+         ORG   CHARAC+X'40'
+         DC    X'00'
+         ORG
+SPACES   DC    256X'00'
+         ORG   SPACES+X'40'
+         DC    X'01'
+         ORG
+NUMS     DC    256X'00'
+         ORG   NUMS+X'F0'
+         DC    10X'01'
+         ORG
+NNUMS    DC    256X'01'
+         ORG   NNUMS+X'F0'
+         DC    10X'00'
+         ORG
+TOUPPER  DC    256X'00'
+         ORG   TOUPPER+C'a'
+         DC    X'C1C2C3C4C5C6C7C8C9'
+         ORG   TOUPPER+C'j'
+         DC    X'D1D2D3D4D5D6D7D8D9'
+         ORG   TOUPPER+C's'
+         DC    X'E2E3E4E5E6E7E8E9'
+         ORG
+TOLOWER  DC    256X'00'
+         ORG   TOLOWER+C'A'
+         DC    X'818283848586878889'
+         ORG   TOLOWER+C'J'
+         DC    X'919293949596979899'
+         ORG   TOLOWER+C'S'
+         DC    X'A2A3A4A5A6A7A8A9'
+         ORG   TOLOWER+C'a'
+         DC    X'818283848586878889'
+         ORG   TOLOWER+C'j'
+         DC    X'919293949596979899'
+         ORG   TOLOWER+C's'
+         DC    X'A2A3A4A5A6A7A8A9'
+         ORG
+*
+********************************************
+* Subroutine: PRINT
+*
+* Desc: Prints out all the data stored in a the
+*       table built by the build routine with
+*       a supplied header
+*
+* Expected parameters:
+* 1F: Addr of table
+* 2F: Addr of EOT ptr
+* 3F: Addr of Headder text
+*
+* R2 - Table cursor
+* R3 - EOT ptr
+* R4 - Counter for page
+* R5 - Used for CVD Instruc
+*
+********************************************
+PRINT    CSECT
+         STM   14,12,12(13)            STD ENTRY LINKAGE
+         LR    12,15
+         USING PRINT,12
+         LA    14,PRNSAVE
+         ST    13,4(0,14)
+         ST    14,8(0,13)
+         LR    13,14
+         USING ENTRY,2                 DSECT FOR EASE
+         LM    2,3,0(1)                LOAD PLIST
+         L     6,8(1)                  LOAD HEADDER TEXT
+         L     3,0(,3)                 LOAD EOT PTR
+REPRNT   DS    0H
+         EJECT                         PRINT ON NEW PAGE
+         SR    4,4                     ZERO LINE COUNTER
+         MVI   PRINTLN,C'1'            UP TO TOPLOP IS HEADDER
+         MVI   PRINTLN+1,C' '          FORMATTING AND OUTPUT
+         MVC   PRINTLN+2(69),PRINTLN+1
+         MVC   PRINTLN+25(25),0(6)
+         XPRNT PRINTLN,71
+         MVI   PRINTLN,C'-'
+         MVC   PRINTLN+2(69),PRINTLN+1
+         MVC   PRINTLN+3(9),=CL9'ID Number'
+         MVC   PRINTLN+13(9),=CL9'Last Name'
+         MVC   PRINTLN+28(10),=CL10'First Name'
+         MVC   PRINTLN+42(7),=CL7'Score 1'
+         MVC   PRINTLN+53(7),=CL7'Score 2'
+         MVC   PRINTLN+64(7),=CL7'Score 3'
+         XPRNT PRINTLN,71
+         MVI   PRINTLN,C'0'
+         MVI   PRINTLN+1,C' '
+TOPLOP   MVC   PRINTLN+2(69),PRINTLN+1 CLEAR THE OUTPUT LINE
+         L     5,ID                    LOAD ID
+         CVD   5,PKHOLD                CONVERT ID TO PACKED
+         UNPK  PRINTLN+3(8),PKHOLD+3(5) UNPK ONTO PRNTLN
+         TR    PRINTLN+10(1),WHYC      CHANGE XC TO XF AT END
+         MVC   PRINTLN+13(12),LNAME    NEXT 9 LINES IS TEXT 
+         MVC   PRINTLN+28(10),FNAME    FORMATING
+         UNPK  PRINTLN+44(3),SCORE1(2)
+         TR    PRINTLN+46(1),WHYC
+         UNPK  PRINTLN+55(3),SCORE2(2)
+         TR    PRINTLN+57(1),WHYC
+         UNPK  PRINTLN+66(3),SCORE3(2)
+         TR    PRINTLN+68(1),WHYC
+         XPRNT PRINTLN,71
+         LA    2,32(,2)                OFFSET TABLE CURSOR
+         CR    2,3                     IF AT EOT
+         BC    B'1010',L1END           EXIT LOOP
+         A     4,=F'1'                 ADD 1 TO LINE COUNTER
+         C     4,=F'18'                AT 18 LINES
+         BE    REPRNT                  PRINT NEW PAGE
+         B     TOPLOP
+L1END    DS    0H
+         DROP  2                       CLEAR aSSOCIATION
+         L     13,4(0,13)              STD EXIT LINKAGE
+         LM    14,12,12(13)
+         BR    14
+         LTORG
+PRNSAVE  DS    18F
+PKHOLD   DS    D                       HOLDER FOR CVB
+PRINTLN  DS    CL71                    OUTPUT LINE
+WHYC     DC    256X'00'                THIS IS NEEDED SINCE THE
+         ORG   WHYC+X'C0'              THE SCORES DONT END IN F
+         DC    X'F0F1F2F3F4F5F6F7F8F9'
+         ORG   WHYC+X'F0'
+         DC    X'F0F1F2F3F4F5F6F7F8F9'
+         ORG

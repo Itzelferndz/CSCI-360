@@ -1,0 +1,225 @@
+//KC03E18L JOB ,'',MSGCLASS=H
+//STEP1    EXEC  PGM=ASSIST
+//STEPLIB    DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT   DD  SYSOUT=*
+//SYSIN      DD  *
+************************************************************
+*
+*           Assignment 5
+*  
+*
+*  Register usage:
+*    1        Param list/XDECO
+*    2        Buffer
+*   10        location in program when branched
+*   13        main save
+*   14        DONT USE
+*   15        Base register
+************************************************************
+MAIN     CSECT
+         STM   14,12,12(13)
+         LR    12,15
+         USING MAIN,12
+         LA    14,SAVEM
+         ST    13,4(,14)
+         ST    14,8(,13)
+         LR    13,14
+         LA    1,TABLE      Load the address of Table
+         ST    1,PARMS      Store Table address in params
+         LA    1,EOT        Load address of end of table
+         ST    1,PARMS+4    Store end of table in params
+         LA    1,TABLELEN   Load the address of table lenght
+         ST    1,PARMS+8    Store the table lenght in params
+         LA    1,RESULT     Load address of results
+         ST    1,PARMS+16   Store in params
+         LA    1,PARMS      Address of params in R13
+         L     15,=V(BUILD) Load external sub
+         BALR  14,15        Branch to sub
+         LA    1,PARMS      Set params to R1
+         L     15,=V(PRINT) Load external sub
+         BALR  14,15        Branch to sub
+         LA    1,PARMS
+         L     15,=V(TALLY) Load external sub
+         BALR  14,15
+*
+         L     13,4(13)
+         LM    14,12,12(13)
+         BR    14           End of subroutine
+         LTORG                Literals are put here
+TABLE    DS    72F'-32'
+EOT      DS    0H
+TABLELEN DS    F'0'
+PARMS    DS    5F'0'
+RESULT   DS    F'0'
+SAVEM    DS    18F'0'
+BUFF     DS    80C' '
+EXIT     DS    F
+***********************************
+*
+*  Register usage:
+*    1        Used by XDECI/params
+*    2        Number in base10
+*    3        Table address
+*    4        EOT address
+*    5        Length of table address
+*    6        Counter
+*   10        Base
+*   13        Save Location
+*   14        return address
+*   15        Base register
+*
+***********************************
+BUILD    CSECT
+         STM   14,12,12(13)
+         LR    12,15
+         USING BUILD,12
+         LA    14,SAVEB
+         ST    13,4(,14)
+         ST    14,8(,13)
+         LR    13,14
+         LM    3,5,0(1)     Load params into R3,R4, and R5
+*
+         SR    6,6          Clear R6 to use as a counter
+BLOOP    XREAD BUFFER,80    Read a line from the input file
+         BL    BEND         Check if read failed
+         LA    1,BUFFER     Load the address of buffer into R1
+BLOOP1   XDECI 2,0(,1)     Read number from read line
+         BO    BLOOP        Check if read failes
+         C     2,=F'-123456789'
+         BE    BEND
+         A     6,=F'1'      Add one to counter
+         ST    2,0(,3)     Store number in table
+         LA    3,4(,3)     Advance the table pointer
+         CR    3,4          Compare the table pointer to the EOT
+         BE    BEND         If at EOT end build
+         B     BLOOP1       Goto top of loop
+BEND     DS    0H
+         ST    6,0(,5)     Store the number of elements
+*
+         L     13,4(,13)
+         LM    14,12,12(13)
+         BR    14           End subroutine
+         LTORG              Literals are put here
+BUFFER   DS    80C
+         DC    C'*'
+SAVEB    DS    18F'0'
+***********************************
+*
+*  Register usage:
+*    1        Used by XDECI/params
+*    2        Line string location
+*    3        Table address
+*    4        EOT address
+*    5        Length of table address
+*    6        Width counter
+*    7        Value from table
+*   10        Base
+*   13        Save area
+*   14
+*   15        Base register
+*
+***********************************
+PRINT    CSECT
+         STM   14,12,12(13)
+         LR    12,15
+         USING PRINT,12
+         LA    14,SAVEC
+         ST    13,4(,14)
+         ST    14,8(,13)
+         LR    13,14
+         LM    3,5,0(1)     Load params into R3,R4, and R5
+*
+         XPRNT PHEAD,44     Print the table head
+         L     5,0(,5)     Load the lenght of the table
+PLOOP    L     6,=F'6'      Counter for width of table
+         LA    2,PLINE+1    Set R2 to the address of the print line
+         MVI   PLINE+1,C' ' Clear the print line
+         MVC   PLINE+2(83),PLINE+1
+         C     5,=F'0'      Check if all values have been printed
+         BE    PEND
+PLOOP1   C     5,=F'0'      Check if all values have been printed
+         BE    PEND1
+         L     7,0(,3)     Get current value from table
+         XDECO 7,TEMP       Hex to base 10
+         MVC   0(12,2),TEMP Store base 10 num in print line
+         LA    2,12(,2)    Advance print line pointer
+         LA    3,4(,3)     Advance table pointer
+         S     5,=F'1'      Decrement table length counter
+         S     6,=F'1'      Decrement line width counter
+         C     6,=F'0'      Check if we have filled a line
+         BNE   PLOOP1       Goto top of loop1
+         XPRNT PLINE,86     Print print line
+         B     PLOOP        Goto top of loop
+PEND1    XPRNT PLINE,86     Print printline
+PEND     DS    0H
+*
+         L     13,4(,13)
+         LM    14,12,12(13)
+         BR    14           End of subroutine
+         LTORG              Literals are put here
+TEMP     DS    CL12
+SAVEC    DC    18F'0'
+PHEAD    DC    CL15'1Table Contents'
+PLINE    DC    CL1'0'
+         DS    CL72' '
+***********************************
+*
+*  Register usage:
+*    3        Table pointer
+*    4        EOT
+*    5
+*    6        tally number
+*    7
+*    8
+*    9        M
+*   10        Base
+*   13        Save Area
+*   14
+*   15        Base register
+*
+***********************************
+TALLY    CSECT
+         STM   14,12,12(13)
+         LR    12,15
+         USING TALLY,12
+         LM    3,7,0(1)     Load params into R3,R4, R5, R6, R7
+         LA    14,SAVED
+         ST    13,4(,14)
+         ST    14,8(,13)
+         LR    13,14
+         SR    9,9          clear out register 9
+TLOOP    XREAD BUFFE1,80
+         BC    B'0100',TEND
+         XDECI 9,BUFFE1     Data into 9
+         L     8,=F'0'      load 1 into counter
+TLOOP2   CR    3,4
+         BC    B'1010',T2END
+         L     7,0(3)
+         LA    3,4(0,3)     (move pointer over to next number)
+         M     6,=F'1'
+         DR    6,9
+         C     6,=F'0'
+         BC    B'0110',TLOOP2
+         A     8,=F'1'
+         B     TLOOP2
+T2END    DS    0H
+         XDECI 9,NUM1
+         XDECI 8,NUM2
+         XPRNT TLINE,42
+         B     TLOOP
+TEND     DS    0H
+         L     13,4(13)
+         LM    14,12,12(13)
+         BR    14           End of subroutine
+         LTORG              Literals are put here
+BUFFE1   DS    81C'*'
+SAVED    DS    18F'0'
+TLINE    DC    CL26'The number of multiples of'
+NUM1     DC    CL12' '
+TLINE2   DC    CL4'is: '
+NUM2     DC    CL12' '
+***********************************
+         END   MAIN
+/*
+//FT05F001  DD  DSN=KC02314.AUTUMN19.CSCI360.HW5DATA,DISP=SHR
+//
